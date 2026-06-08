@@ -1,0 +1,357 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="FitnessTracker.Views.GymWorkoutPage"
+             Title="Rejestracja Serii"
+             BackgroundColor="#F1F5F9">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15,20"
+                             Spacing="18"
+                             MaximumWidthRequest="620"
+                             HorizontalOptions="Center">
+
+            <!-- HEADER -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#0F172A"
+                    StrokeThickness="0"
+                    Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="#0F172A"
+                            Offset="0,6"
+                            Radius="12"
+                            Opacity="0.22" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Trening siłowy"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+
+                    <Label Text="Wybierz partię, ćwiczenie i uzupełnij serie w nowoczesnym widoku."
+                           FontSize="13"
+                           TextColor="#CBD5E1" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KARTA: SZCZEGÓŁY -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="White"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="#334155"
+                            Offset="0,4"
+                            Radius="10"
+                            Opacity="0.08" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Padding="20"
+                                     Spacing="16">
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="🎯"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Szczegóły ćwiczenia"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- WYBÓR PARTII -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Partia mięśniowa"
+                               FontSize="12"
+                               TextColor="#64748B"
+                               FontAttributes="Bold"
+                               TextTransform="Uppercase" />
+
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="12,0">
+                            <Picker ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                                    TextColor="#0F172A"
+                                    FontAttributes="Bold"
+                                    HeightRequest="48"
+                                    BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- WYBÓR ĆWICZENIA LUB DODANIE WŁASNEGO -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Rodzaj ćwiczenia"
+                               FontSize="12"
+                               TextColor="#64748B"
+                               FontAttributes="Bold"
+                               TextTransform="Uppercase" />
+
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="12,0">
+                            <Picker ItemsSource="{Binding AvailableExercises}"
+                                    SelectedItem="{Binding SelectedExercise, Mode=TwoWay}"
+                                    TextColor="#0F172A"
+                                    FontAttributes="Bold"
+                                    HeightRequest="48"
+                                    BackgroundColor="Transparent" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KARTA: SERIE -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="White"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="#334155"
+                            Offset="0,4"
+                            Radius="10"
+                            Opacity="0.08" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Padding="20"
+                                     Spacing="14">
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="🏋️"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Serie"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- NAGŁÓWKI TABELI SERII -->
+                    <Grid ColumnDefinitions="44,*,*,50"
+                          ColumnSpacing="8"
+                          Margin="0,0,0,4">
+                        <Label Grid.Column="0"
+                               Text="SET"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#64748B"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Grid.Column="1"
+                               Text="KG"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#64748B"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Grid.Column="2"
+                               Text="REPS"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#64748B"
+                               HorizontalTextAlignment="Center" />
+                    </Grid>
+
+                    <!-- LISTA SERII -->
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Sets}"
+                                         Spacing="10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 14"
+                                        BackgroundColor="#F8FAFC"
+                                        Stroke="#E2E8F0"
+                                        StrokeThickness="1"
+                                        Padding="10">
+                                    <Grid ColumnDefinitions="44,*,*,50"
+                                          ColumnSpacing="8">
+
+                                        <!-- NUMER SERII -->
+                                        <Border Grid.Column="0"
+                                                StrokeShape="RoundRectangle 10"
+                                                BackgroundColor="#E2E8F0"
+                                                StrokeThickness="0"
+                                                HeightRequest="42"
+                                                WidthRequest="42"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center">
+                                            <Label Text="{Binding SetNumber}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#334155"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+
+                                        <!-- CIĘŻAR (KG) -->
+                                        <Border Grid.Column="1"
+                                                StrokeShape="RoundRectangle 10"
+                                                BackgroundColor="White"
+                                                Stroke="#CBD5E1"
+                                                StrokeThickness="1">
+                                            <Entry Text="{Binding Weight}"
+                                                   Keyboard="Numeric"
+                                                   HorizontalTextAlignment="Center"
+                                                   TextColor="#0F172A"
+                                                   FontAttributes="Bold"
+                                                   BackgroundColor="Transparent"
+                                                   HeightRequest="42" />
+                                        </Border>
+
+                                        <!-- POWTÓRZENIA -->
+                                        <Border Grid.Column="2"
+                                                StrokeShape="RoundRectangle 10"
+                                                BackgroundColor="White"
+                                                Stroke="#CBD5E1"
+                                                StrokeThickness="1">
+                                            <Entry Text="{Binding Reps}"
+                                                   Keyboard="Numeric"
+                                                   HorizontalTextAlignment="Center"
+                                                   TextColor="#0F172A"
+                                                   FontAttributes="Bold"
+                                                   BackgroundColor="Transparent"
+                                                   HeightRequest="42" />
+                                        </Border>
+
+                                        <!-- PRZYCISK USUWANIA -->
+                                        <Border Grid.Column="3"
+                                                BackgroundColor="#FEF2F2"
+                                                Stroke="#FECACA"
+                                                StrokeShape="RoundRectangle 10"
+                                                StrokeThickness="1"
+                                                HeightRequest="42"
+                                                WidthRequest="42"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center">
+                                            <Button Text="✕"
+                                                    FontSize="18"
+                                                    FontAttributes="Bold"
+                                                    TextColor="#DC2626"
+                                                    BackgroundColor="Transparent"
+                                                    Padding="0"
+                                                    CornerRadius="10"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveSetCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <!-- PRZYCISK: DODAJ SERIĘ -->
+                    <Button Text="+ Dodaj serię"
+                            Command="{Binding AddSetCommand}"
+                            BackgroundColor="#EFF6FF"
+                            TextColor="#2563EB"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="46"
+                            Margin="0,6,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- PODSUMOWANIE -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="#FFFFFF"
+                    Stroke="#E2E8F0"
+                    StrokeThickness="1"
+                    Padding="18">
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="12">
+
+                    <Border Grid.Column="0"
+                            StrokeShape="RoundRectangle 14"
+                            BackgroundColor="#F8FAFC"
+                            StrokeThickness="0"
+                            Padding="14">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Liczba serii"
+                                   FontSize="12"
+                                   TextColor="#64748B" />
+                            <Label Text="{Binding Sets.Count}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            StrokeShape="RoundRectangle 14"
+                            BackgroundColor="#F8FAFC"
+                            StrokeThickness="0"
+                            Padding="14">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Status"
+                                   FontSize="12"
+                                   TextColor="#64748B" />
+                            <Label Text="Gotowe do zapisu"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#16A34A" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <!-- TOOLKIT: SZYBKA POMOC -->
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Border StrokeShape="RoundRectangle 16"
+                            BackgroundColor="#FFF7ED"
+                            Stroke="#FED7AA"
+                            StrokeThickness="1"
+                            Padding="16">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="💡"
+                                   FontSize="18"
+                                   VerticalOptions="Center" />
+                            <Label Text="Wskazówka treningowa"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#9A3412"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </toolkit:Expander.Header>
+
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="White"
+                        Stroke="#FED7AA"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Margin="0,8,0,0">
+                    <Label Text="Po zapisaniu możesz później edytować trening z poziomu historii. Jeśli dodałeś za dużo serii, usuń je ikoną po prawej stronie."
+                           FontSize="14"
+                           TextColor="#7C2D12" />
+                </Border>
+            </toolkit:Expander>
+
+            <!-- PRZYCISK ZAPISU -->
+            <Button Text="Zapisz ćwiczenie"
+                    Command="{Binding SaveWorkoutCommand}"
+                    BackgroundColor="#0F172A"
+                    TextColor="White"
+                    CornerRadius="14"
+                    HeightRequest="56"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Margin="0,4,0,20">
+                <Button.Shadow>
+                    <Shadow Brush="#0F172A"
+                            Offset="0,4"
+                            Radius="8"
+                            Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

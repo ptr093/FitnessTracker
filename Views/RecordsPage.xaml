@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Views.RecordsPage"
+             Title="Rekordy"
+             BackgroundColor="#F1F5F9">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,20,20,30"
+                             Spacing="16"
+                             MaximumWidthRequest="720"
+                             HorizontalOptions="Center">
+
+            <Border StrokeShape="RoundRectangle 22"
+                    BackgroundColor="#0F172A"
+                    StrokeThickness="0"
+                    Padding="22">
+                <Border.Shadow>
+                    <Shadow Brush="#0F172A"
+                            Offset="0,8"
+                            Radius="14"
+                            Opacity="0.22" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Rekordy"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+
+                    <Label Text="{Binding SelectedHeader}"
+                           FontSize="13"
+                           TextColor="#CBD5E1" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Resetuj wybór"
+                    Command="{Binding ResetSelectionCommand}"
+                    BackgroundColor="White"
+                    TextColor="#1E293B"
+                    BorderColor="#CBD5E1"
+                    BorderWidth="1"
+                    CornerRadius="14"
+                    HeightRequest="48"
+                    FontAttributes="Bold" />
+
+            <!-- Kategorie główne -->
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Categories}"
+                                 Spacing="12">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 18"
+                                BackgroundColor="{Binding BackgroundColor}"
+                                Stroke="{Binding BorderColor}"
+                                StrokeThickness="1"
+                                Padding="18">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCategoryCommand}"
+                                                      CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+
+                            <Grid ColumnDefinitions="Auto,*,Auto"
+                                  ColumnSpacing="14">
+                                <Label Text="{Binding Icon}"
+                                       FontSize="28"
+                                       VerticalOptions="Center" />
+
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding TextColor}" />
+
+                                    <Label Text="{Binding Subtitle}"
+                                           FontSize="13"
+                                           TextColor="{Binding TextColor}"
+                                           Opacity="0.75" />
+                                </VerticalStackLayout>
+
+                                <Label Grid.Column="2"
+                                       Text="›"
+                                       FontSize="26"
+                                       TextColor="{Binding TextColor}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <!-- Partie siłowe -->
+            <VerticalStackLayout IsVisible="{Binding ShowStrengthCategories}"
+                                 Spacing="10">
+                <Label Text="Kategorie siłowe"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#1E293B" />
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding StrengthCategories}"
+                                     Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 16"
+                                    BackgroundColor="{Binding BackgroundColor}"
+                                    Stroke="{Binding BorderColor}"
+                                    StrokeThickness="1"
+                                    Padding="16">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectStrengthCategoryCommand}"
+                                                          CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding TextColor}" />
+                                    <Label Text="{Binding Subtitle}"
+                                           FontSize="12"
+                                           TextColor="{Binding TextColor}"
+                                           Opacity="0.75" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Ćwiczenia -->
+            <VerticalStackLayout IsVisible="{Binding ShowExercises}"
+                                 Spacing="10">
+                <Label Text="Ćwiczenia"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="#1E293B" />
+
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Exercises}"
+                                     Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 16"
+                                    BackgroundColor="{Binding BackgroundColor}"
+                                    Stroke="{Binding BorderColor}"
+                                    StrokeThickness="1"
+                                    Padding="16">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectExerciseCommand}"
+                                                          CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="{Binding Title}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{Binding TextColor}" />
+                                    <Label Text="{Binding Subtitle}"
+                                           FontSize="12"
+                                           TextColor="{Binding TextColor}"
+                                           Opacity="0.75" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Rekordy -->
+            <CollectionView ItemsSource="{Binding Records}"
+                            SelectionMode="None"
+                            IsVisible="{Binding ShowRecords}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border StrokeShape="RoundRectangle 18"
+                                BackgroundColor="White"
+                                StrokeThickness="0"
+                                Padding="18"
+                                Margin="0,0,0,12">
+                            <Border.Shadow>
+                                <Shadow Brush="#334155"
+                                        Offset="0,5"
+                                        Radius="10"
+                                        Opacity="0.08" />
+                            </Border.Shadow>
+
+                            <VerticalStackLayout Spacing="14">
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      ColumnSpacing="12">
+
+                                    <Border BackgroundColor="{Binding AccentBackground}"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 14"
+                                            Padding="12"
+                                            VerticalOptions="Start">
+                                        <Label Text="{Binding Icon}"
+                                               FontSize="20" />
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="4">
+                                        <Label Text="{Binding Title}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="#0F172A" />
+
+                                        <Label Text="{Binding Subtitle}"
+                                               FontSize="13"
+                                               TextColor="#64748B" />
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="2"
+                                            BackgroundColor="{Binding BadgeBackground}"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 12"
+                                            Padding="10,6"
+                                            VerticalOptions="Start">
+                                        <Label Text="{Binding Category}"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="{Binding BadgeTextColor}" />
+                                    </Border>
+                                </Grid>
+
+                                <Border StrokeShape="RoundRectangle 16"
+                                        BackgroundColor="#F8FAFC"
+                                        Stroke="#E2E8F0"
+                                        StrokeThickness="1"
+                                        Padding="14">
+                                    <VerticalStackLayout Spacing="6">
+                                        <Label Text="{Binding ValueText}"
+                                               FontSize="24"
+                                               FontAttributes="Bold"
+                                               TextColor="#0F172A" />
+
+                                        <Label Text="{Binding DetailText}"
+                                               FontSize="13"
+                                               TextColor="#64748B" />
+                                    </VerticalStackLayout>
+                                </Border>
+
+                                <Grid ColumnDefinitions="*,*"
+                                      ColumnSpacing="10">
+                                    <Border BackgroundColor="#F8FAFC"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 14"
+                                            Padding="12">
+                                        <VerticalStackLayout Spacing="3">
+                                            <Label Text="Data"
+                                                   FontSize="11"
+                                                   TextColor="#94A3B8" />
+                                            <Label Text="{Binding DateText}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#334155" />
+                                        </VerticalStackLayout>
+                                    </Border>
+
+                                    <Border Grid.Column="1"
+                                            BackgroundColor="#F8FAFC"
+                                            StrokeThickness="0"
+                                            StrokeShape="RoundRectangle 14"
+                                            Padding="12">
+                                        <VerticalStackLayout Spacing="3">
+                                            <Label Text="Szczegóły"
+                                                   FontSize="11"
+                                                   TextColor="#94A3B8" />
+                                            <Label Text="{Binding ExtraText}"
+                                                   FontSize="13"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#334155" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Border IsVisible="{Binding ShowEmptyState}"
+                    StrokeShape="RoundRectangle 18"
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    Padding="24">
+                <Border.Shadow>
+                    <Shadow Brush="#334155"
+                            Offset="0,5"
+                            Radius="10"
+                            Opacity="0.08" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Brak danych"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#1E293B"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="Dla tego wyboru nie ma jeszcze zapisanych rekordów."
+                           FontSize="13"
+                           TextColor="#64748B"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

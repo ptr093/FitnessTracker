@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="FitnessTracker.Views.HistoryPage"
+             Title="Historia"
+             BackgroundColor="#F1F5F9">
+
+    <RefreshView IsRefreshing="{Binding IsRefreshing}"
+                 Command="{Binding LoadDataCommand}">
+
+        <ScrollView>
+            <VerticalStackLayout Padding="15,20"
+                                 Spacing="18"
+                                 MaximumWidthRequest="720"
+                                 HorizontalOptions="Center">
+
+                <!-- HEADER -->
+                <Border StrokeShape="RoundRectangle 20"
+                        BackgroundColor="#0F172A"
+                        StrokeThickness="0"
+                        Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#0F172A"
+                                Offset="0,6"
+                                Radius="12"
+                                Opacity="0.22" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Historia treningów"
+                               FontSize="24"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+
+                        <Label Text="Przeglądaj i edytuj zapisane treningi."
+                               FontSize="13"
+                               TextColor="#CBD5E1" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- DNI TRENINGOWE -->
+
+                <!-- DNI TRENINGOWE -->
+                <Border StrokeShape="RoundRectangle 18"
+                        BackgroundColor="White"
+                        StrokeThickness="0">
+                    <Border.Shadow>
+                        <Shadow Brush="#334155"
+                                Offset="0,4"
+                                Radius="10"
+                                Opacity="0.08" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Padding="20"
+                                         Spacing="14">
+
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="🗓️"
+                                   FontSize="18"
+                                   VerticalOptions="Center" />
+                            <Label Text="Kalendarz treningów"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#1E293B"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <Label Text="Wybierz dzień, aby zobaczyć szczegóły"
+                               FontSize="13"
+                               TextColor="#64748B" />
+
+                        <ScrollView Orientation="Horizontal">
+                            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding TrainingDays}"
+                                                   Spacing="10">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border StrokeShape="RoundRectangle 16"
+                                                BackgroundColor="{Binding BackgroundColor}"
+                                                StrokeThickness="0"
+                                                Padding="0"
+                                                WidthRequest="68"
+                                                HeightRequest="68">
+                                            <Button Text="{Binding DayLabel}"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectDayCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    BackgroundColor="Transparent"
+                                                    TextColor="{Binding TextColor}"
+                                                    CornerRadius="16"
+                                                    FontAttributes="Bold"
+                                                    LineBreakMode="WordWrap" />
+                                        </Border>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- LISTA TRENINGÓW -->
+                <Border StrokeShape="RoundRectangle 18"
+                        BackgroundColor="White"
+                        StrokeThickness="0">
+                    <Border.Shadow>
+                        <Shadow Brush="#334155"
+                                Offset="0,4"
+                                Radius="10"
+                                Opacity="0.08" />
+                    </Border.Shadow>
+
+                    <VerticalStackLayout Padding="20"
+                                         Spacing="14">
+
+                        <Grid ColumnDefinitions="*,Auto"
+                              ColumnSpacing="12">
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="📚"
+                                       FontSize="18"
+                                       VerticalOptions="Center" />
+                                <Label Text="{Binding SelectedDayTitle}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#1E293B"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#F1F5F9"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 12"
+                                    Padding="10,6">
+                                <Label Text="{Binding SelectedDayWorkoutsCount, StringFormat='{}{0} treningów'}"
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="#334155" />
+                            </Border>
+                        </Grid>
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding FilteredWorkouts}"
+                                             Spacing="12">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <toolkit:Expander>
+                                        <toolkit:Expander.Header>
+                                            <Border StrokeShape="RoundRectangle 16"
+                                                    BackgroundColor="#F8FAFC"
+                                                    Stroke="#E2E8F0"
+                                                    StrokeThickness="1"
+                                                    Padding="16">
+
+                                                <VerticalStackLayout Spacing="12">
+
+                                                    <Grid ColumnDefinitions="*,Auto"
+                                                          ColumnSpacing="12">
+
+                                                        <VerticalStackLayout Grid.Column="0"
+                                                                             Spacing="4">
+                                                            <Label Text="{Binding HeaderTitle}"
+                                                                   FontSize="17"
+                                                                   FontAttributes="Bold"
+                                                                   TextColor="#0F172A" />
+
+                                                            <Label Text="{Binding HeaderSubtitle}"
+                                                                   FontSize="13"
+                                                                   TextColor="#64748B" />
+                                                        </VerticalStackLayout>
+
+                                                        <Border Grid.Column="1"
+                                                                BackgroundColor="{Binding BadgeBackground}"
+                                                                StrokeThickness="0"
+                                                                StrokeShape="RoundRectangle 12"
+                                                                Padding="10,6"
+                                                                VerticalOptions="Start">
+                                                            <Label Text="{Binding BadgeText}"
+                                                                   FontSize="11"
+                                                                   FontAttributes="Bold"
+                                                                   TextColor="{Binding BadgeTextColor}" />
+                                                        </Border>
+                                                    </Grid>
+
+                                                    <HorizontalStackLayout Spacing="10">
+
+                                                        <Button Text="Edytuj"
+                                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditWorkoutCommand}"
+                                                                CommandParameter="{Binding .}"
+                                                                BackgroundColor="#EFF6FF"
+                                                                TextColor="#2563EB"
+                                                                FontAttributes="Bold"
+                                                                CornerRadius="12"
+                                                                HeightRequest="40"
+                                                                Padding="14,0" />
+
+                                                        <Button Text="Usuń"
+                                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteWorkoutCommand}"
+                                                                CommandParameter="{Binding .}"
+                                                                BackgroundColor="#FEF2F2"
+                                                                TextColor="#DC2626"
+                                                                FontAttributes="Bold"
+                                                                CornerRadius="12"
+                                                                HeightRequest="40"
+                                                                Padding="14,0" />
+
+                                                    </HorizontalStackLayout>
+
+                                                </VerticalStackLayout>
+                                            </Border>
+                                        </toolkit:Expander.Header>
+
+                                        <Border StrokeShape="RoundRectangle 16"
+                                                BackgroundColor="White"
+                                                Stroke="#E2E8F0"
+                                                StrokeThickness="1"
+                                                Padding="14"
+                                                Margin="0,8,0,0">
+
+                                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding DetailLines}"
+                                                                 Spacing="8">
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border StrokeShape="RoundRectangle 12"
+                                                                BackgroundColor="#F8FAFC"
+                                                                StrokeThickness="0"
+                                                                Padding="12,10">
+                                                            <Label Text="{Binding .}"
+                                                                   FontSize="14"
+                                                                   TextColor="#334155" />
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </VerticalStackLayout>
+
+                                        </Border>
+                                    </toolkit:Expander>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout IsVisible="{Binding ShowEmptyState}"
+                                             Padding="16"
+                                             Spacing="8">
+                            <Label Text="Brak treningów w tym dniu"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#1E293B"
+                                   HorizontalTextAlignment="Center" />
+
+                            <Label Text="Wybierz inny dzień albo dodaj nowy trening."
+                                   FontSize="13"
+                                   TextColor="#64748B"
+                                   HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- TOOLKIT: WSKAZÓWKA -->
+                <toolkit:Expander>
+                    <toolkit:Expander.Header>
+                        <Border StrokeShape="RoundRectangle 16"
+                                BackgroundColor="#FFF7ED"
+                                Stroke="#FED7AA"
+                                StrokeThickness="1"
+                                Padding="16">
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="💡"
+                                       FontSize="18"
+                                       VerticalOptions="Center" />
+                                <Label Text="Wskazówka"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#9A3412"
+                                       VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </toolkit:Expander.Header>
+
+                    <Border StrokeShape="RoundRectangle 16"
+                            BackgroundColor="White"
+                            Stroke="#FED7AA"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,8,0,0">
+                        <Label Text="Z poziomu historii możesz szybko poprawić błędny trening, usunąć go"
+                               FontSize="14"
+                               TextColor="#7C2D12" />
+                    </Border>
+                </toolkit:Expander>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

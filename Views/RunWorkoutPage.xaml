@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="FitnessTracker.Views.RunWorkoutPage"
+             Title="Bieganie"
+             BackgroundColor="#F1F5F9">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15,20"
+                             Spacing="18"
+                             MaximumWidthRequest="620"
+                             HorizontalOptions="Center">
+
+            <!-- HEADER -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#064E3B"
+                    StrokeThickness="0"
+                    Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="#064E3B"
+                            Offset="0,6"
+                            Radius="12"
+                            Opacity="0.22" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Trening biegowy"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+
+                    <Label Text="Uzupełnij dystans, czas i międzyczasy w bardziej nowoczesnym widoku."
+                           FontSize="13"
+                           TextColor="#D1FAE5" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KARTA: SZCZEGÓŁY BIEGU -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="White"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="#334155"
+                            Offset="0,4"
+                            Radius="10"
+                            Opacity="0.08" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Padding="20"
+                                     Spacing="16">
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="🏃"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Szczegóły biegu"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="12">
+
+                        <VerticalStackLayout Grid.Column="0"
+                                             Spacing="6">
+                            <Label Text="Dystans (km)"
+                                   FontSize="12"
+                                   TextColor="#64748B"
+                                   FontAttributes="Bold"
+                                   TextTransform="Uppercase" />
+
+                            <Border StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeThickness="1">
+                                <Grid Padding="12,0">
+                                    <Entry Text="{Binding RunDistance}"
+                                           Keyboard="Numeric"
+                                           Placeholder="Np. 5"
+                                           PlaceholderColor="#94A3B8"
+                                           TextColor="#0F172A"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"
+                                           BackgroundColor="Transparent"
+                                           HeightRequest="48" />
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="6">
+                            <Label Text="Czas (min)"
+                                   FontSize="12"
+                                   TextColor="#64748B"
+                                   FontAttributes="Bold"
+                                   TextTransform="Uppercase" />
+
+                            <Border StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeThickness="1">
+                                <Grid Padding="12,0">
+                                    <Entry Text="{Binding RunTime}"
+                                           Keyboard="Numeric"
+                                           Placeholder="Np. 26"
+                                           PlaceholderColor="#94A3B8"
+                                           TextColor="#0F172A"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"
+                                           BackgroundColor="Transparent"
+                                           HeightRequest="48" />
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KARTA: MIĘDZYCZASY -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="White"
+                    StrokeThickness="0">
+                <Border.Shadow>
+                    <Shadow Brush="#334155"
+                            Offset="0,4"
+                            Radius="10"
+                            Opacity="0.08" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Padding="20"
+                                     Spacing="14">
+
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="⏱️"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Międzyczasy"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Grid ColumnDefinitions="60,*,50"
+                          ColumnSpacing="8"
+                          Margin="0,0,0,4">
+                        <Label Grid.Column="0"
+                               Text="KM"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#64748B"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Grid.Column="1"
+                               Text="TEMPO"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="#64748B"
+                               HorizontalTextAlignment="Center" />
+                    </Grid>
+
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Splits}"
+                                         Spacing="10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border StrokeShape="RoundRectangle 14"
+                                        BackgroundColor="#F8FAFC"
+                                        Stroke="#E2E8F0"
+                                        StrokeThickness="1"
+                                        Padding="10">
+
+                                    <Grid ColumnDefinitions="60,*,50"
+                                          ColumnSpacing="8">
+
+                                        <Border Grid.Column="0"
+                                                StrokeShape="RoundRectangle 10"
+                                                BackgroundColor="#ECFDF5"
+                                                StrokeThickness="0"
+                                                HeightRequest="42"
+                                                WidthRequest="50"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center">
+                                            <Label Text="{Binding Kilometer}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#047857"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                                        </Border>
+
+                                        <Border Grid.Column="1"
+                                                StrokeShape="RoundRectangle 10"
+                                                BackgroundColor="White"
+                                                Stroke="#CBD5E1"
+                                                StrokeThickness="1">
+                                            <Grid Padding="12,0">
+                                                <Entry Text="{Binding Pace}"
+                                                       Placeholder="Np. 4:45"
+                                                       PlaceholderColor="#94A3B8"
+                                                       TextColor="#0F172A"
+                                                       FontAttributes="Bold"
+                                                       HorizontalTextAlignment="Center"
+                                                       BackgroundColor="Transparent"
+                                                       HeightRequest="42" />
+                                            </Grid>
+                                        </Border>
+
+                                        <Border Grid.Column="2"
+                                                BackgroundColor="#FEF2F2"
+                                                Stroke="#FECACA"
+                                                StrokeShape="RoundRectangle 10"
+                                                StrokeThickness="1"
+                                                HeightRequest="42"
+                                                WidthRequest="42"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center">
+                                            <Button Text="✕"
+                                                    FontSize="18"
+                                                    FontAttributes="Bold"
+                                                    TextColor="#DC2626"
+                                                    BackgroundColor="Transparent"
+                                                    Padding="0"
+                                                    CornerRadius="10"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveSplitCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <Button Text="+ Dodaj kilometr"
+                            Command="{Binding AddSplitCommand}"
+                            BackgroundColor="#ECFDF5"
+                            TextColor="#059669"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="46"
+                            Margin="0,6,0,0" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- PODSUMOWANIE -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeThickness="1"
+                    Padding="18">
+                <Grid ColumnDefinitions="*,*"
+                      ColumnSpacing="12">
+
+                    <Border Grid.Column="0"
+                            StrokeShape="RoundRectangle 14"
+                            BackgroundColor="#F8FAFC"
+                            StrokeThickness="0"
+                            Padding="14">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Liczba splitów"
+                                   FontSize="12"
+                                   TextColor="#64748B" />
+                            <Label Text="{Binding Splits.Count}"
+                                   FontSize="22"
+                                   FontAttributes="Bold"
+                                   TextColor="#0F172A" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            StrokeShape="RoundRectangle 14"
+                            BackgroundColor="#F8FAFC"
+                            StrokeThickness="0"
+                            Padding="14">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Status"
+                                   FontSize="12"
+                                   TextColor="#64748B" />
+                            <Label Text="Gotowe do zapisu"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#16A34A" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <!-- TOOLKIT: WSKAZÓWKA -->
+            <toolkit:Expander>
+                <toolkit:Expander.Header>
+                    <Border StrokeShape="RoundRectangle 16"
+                            BackgroundColor="#ECFDF5"
+                            Stroke="#A7F3D0"
+                            StrokeThickness="1"
+                            Padding="16">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="💡"
+                                   FontSize="18"
+                                   VerticalOptions="Center" />
+                            <Label Text="Wskazówka biegowa"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="#065F46"
+                                   VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </toolkit:Expander.Header>
+
+                <Border StrokeShape="RoundRectangle 16"
+                        BackgroundColor="White"
+                        Stroke="#A7F3D0"
+                        StrokeThickness="1"
+                        Padding="16"
+                        Margin="0,8,0,0">
+                    <Label Text="Po zapisaniu możesz później edytować bieg w historii. Wpisuj tempo na kilometr w formacie np. 4:45, żeby było czytelnie przy analizie."
+                           FontSize="14"
+                           TextColor="#065F46" />
+                </Border>
+            </toolkit:Expander>
+
+            <!-- PRZYCISK ZAPISU -->
+            <Button Text="Zapisz bieg"
+                    Command="{Binding SaveWorkoutCommand}"
+                    BackgroundColor="#064E3B"
+                    TextColor="White"
+                    CornerRadius="14"
+                    HeightRequest="56"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    Margin="0,4,0,20">
+                <Button.Shadow>
+                    <Shadow Brush="#064E3B"
+                            Offset="0,4"
+                            Radius="8"
+                            Opacity="0.3" />
+                </Button.Shadow>
+            </Button>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

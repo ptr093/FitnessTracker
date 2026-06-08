@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Views.DashboardPage"
+             Title="Witaj w Treningu!"
+             BackgroundColor="#F1F5F9">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,30,20,40"
+                             Spacing="20"
+                             MaximumWidthRequest="600"
+                             HorizontalOptions="Center">
+
+            <Label Text="Wybierz akcję"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#1E293B"
+                   Margin="0,0,0,10" />
+
+            <!-- KAFELEK: SIŁOWNIA -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#0F172A"
+                    StrokeThickness="0"
+                    HeightRequest="120">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToGymCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#0F172A"
+                            Offset="0,8"
+                            Radius="12"
+                            Opacity="0.25" />
+                </Border.Shadow>
+                <HorizontalStackLayout Padding="25"
+                                       Spacing="20"
+                                       VerticalOptions="Center">
+                    <Label Text="🏋️"
+                           FontSize="40"
+                           VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center"
+                                         Spacing="2">
+                        <Label Text="Trening Siłowy"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="Rejestruj serie i powtórzenia"
+                               FontSize="13"
+                               TextColor="#94A3B8" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- KAFELEK: BIEGANIE -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#064E3B"
+                    StrokeThickness="0"
+                    HeightRequest="120">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToRunCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#064E3B"
+                            Offset="0,8"
+                            Radius="12"
+                            Opacity="0.25" />
+                </Border.Shadow>
+                <HorizontalStackLayout Padding="25"
+                                       Spacing="20"
+                                       VerticalOptions="Center">
+                    <Label Text="🏃"
+                           FontSize="40"
+                           VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center"
+                                         Spacing="2">
+                        <Label Text="Bieganie"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="Dystans, czas i międzyczasy"
+                               FontSize="13"
+                               TextColor="#D1FAE5" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- KAFELEK: HISTORIA -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    HeightRequest="120">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToHistoryCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#334155"
+                            Offset="0,6"
+                            Radius="10"
+                            Opacity="0.08" />
+                </Border.Shadow>
+                <HorizontalStackLayout Padding="25"
+                                       Spacing="20"
+                                       VerticalOptions="Center">
+                    <Label Text="📅"
+                           FontSize="40"
+                           VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center"
+                                         Spacing="2">
+                        <Label Text="Historia Treningów"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B" />
+                        <Label Text="Przeglądaj swoje postępy"
+                               FontSize="13"
+                               TextColor="#64748B" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- KAFELEK: REKORDY -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#FFF7ED"
+                    Stroke="#FED7AA"
+                    StrokeThickness="1"
+                    HeightRequest="120">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToRecordsCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#C2410C"
+                            Offset="0,6"
+                            Radius="10"
+                            Opacity="0.14" />
+                </Border.Shadow>
+                <HorizontalStackLayout Padding="25"
+                                       Spacing="20"
+                                       VerticalOptions="Center">
+                    <Label Text="🏆"
+                           FontSize="40"
+                           VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center"
+                                         Spacing="2">
+                        <Label Text="Rekordy"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#9A3412" />
+                        <Label Text="Najlepsze wyniki i postęp"
+                               FontSize="13"
+                               TextColor="#C2410C" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- SEKCJA SYNC -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#F8FAFC"
+                    Stroke="#E2E8F0"
+                    StrokeThickness="1"
+                    Padding="25"
+                    Margin="0,20,0,0">
+
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="⌚"
+                               FontSize="18"
+                               VerticalOptions="Center" />
+                        <Label Text="Synchronizacja (Garmin/Strava)"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B"
+                               VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="Pobierz swoje najnowsze aktywności biegowe bezpośrednio z zewnętrznego konta."
+                           FontSize="13"
+                           TextColor="#64748B" />
+
+                    <Button Text="{Binding SyncButtonText}"
+                            Command="{Binding SyncApiWorkoutsCommand}"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            CornerRadius="12"
+                            HeightRequest="50"
+                            FontAttributes="Bold"
+                            Margin="0,10,0,0"
+                            IsEnabled="{Binding IsNotSyncing}">
+                        <Button.Shadow>
+                            <Shadow Brush="#2563EB"
+                                    Offset="0,4"
+                                    Radius="8"
+                                    Opacity="0.3" />
+                        </Button.Shadow>
+                    </Button>
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

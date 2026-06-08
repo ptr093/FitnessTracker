@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="FitnessTracker.Views.EditGymWorkoutPopup"
+    CanBeDismissedByTappingOutsideOfPopup="False">
+
+    <Border StrokeShape="RoundRectangle 18"
+            BackgroundColor="White"
+            Padding="0"
+            WidthRequest="360">
+
+        <Grid RowDefinitions="Auto,*,Auto"
+              RowSpacing="0">
+
+            <!-- HEADER -->
+            <Border Grid.Row="0"
+                    BackgroundColor="#0F172A"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 18,18,0,0"
+                    Padding="20,18">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Edytuj trening"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+
+                    <Label Text="Popraw datę, ćwiczenie i serie przed zapisaniem zmian."
+                           FontSize="12"
+                           TextColor="#CBD5E1" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- CONTENT -->
+            <ScrollView Grid.Row="1"
+                        HeightRequest="460">
+                <VerticalStackLayout Padding="20"
+                                     Spacing="14">
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Data treningu"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#64748B" />
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="12,6">
+                            <DatePicker x:Name="WorkoutDatePicker"
+                                        Format="dd MMM yyyy"
+                                        TextColor="#0F172A"
+                                        BackgroundColor="Transparent"
+                                        MaximumDate="2100-12-31"
+                                        MinimumDate="2000-01-01" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Partia"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#64748B" />
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="10,0">
+                            <Entry x:Name="CategoryEntry"
+                                   TextColor="#0F172A"
+                                   BackgroundColor="Transparent"
+                                   HeightRequest="46" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Ćwiczenie"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#64748B" />
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="10,0">
+                            <Entry x:Name="ExerciseEntry"
+                                   TextColor="#0F172A"
+                                   BackgroundColor="Transparent"
+                                   HeightRequest="46" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="10">
+                        <Label Text="Serie"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#64748B"
+                               VerticalOptions="Center" />
+
+                        <Button Grid.Column="1"
+                                Text="+ Dodaj serię"
+                                Clicked="OnAddSetClicked"
+                                BackgroundColor="#EFF6FF"
+                                TextColor="#2563EB"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="40"
+                                Padding="14,0" />
+                    </Grid>
+
+                    <VerticalStackLayout x:Name="SetsContainer"
+                                         Spacing="10" />
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- FOOTER -->
+            <Border Grid.Row="2"
+                    BackgroundColor="White"
+                    StrokeThickness="0"
+                    Padding="16,14">
+                <HorizontalStackLayout Spacing="12"
+                                       HorizontalOptions="End">
+                    <Button Text="Anuluj"
+                            Clicked="OnCancelClicked"
+                            BackgroundColor="#E2E8F0"
+                            TextColor="#0F172A"
+                            CornerRadius="12"
+                            HeightRequest="44" />
+
+                    <Button Text="Zapisz"
+                            Clicked="OnSaveClicked"
+                            BackgroundColor="#0F172A"
+                            TextColor="White"
+                            CornerRadius="12"
+                            HeightRequest="44" />
+                </HorizontalStackLayout>
+            </Border>
+
+        </Grid>
+    </Border>
+</toolkit:Popup>
