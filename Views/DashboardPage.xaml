@@ -163,7 +163,7 @@
                         <Label Text="⌚"
                                FontSize="18"
                                VerticalOptions="Center" />
-                        <Label Text="Synchronizacja (Garmin/Strava)"
+                        <Label Text="Synchronizacja Strava"
                                FontSize="16"
                                FontAttributes="Bold"
                                TextColor="#1E293B"

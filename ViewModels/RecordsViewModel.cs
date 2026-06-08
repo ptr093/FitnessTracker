@@ -21,6 +21,9 @@ public partial class RecordsViewModel : ObservableObject
     private bool isLoading;
 
     [ObservableProperty]
+    private bool showMainCategories = true;
+
+    [ObservableProperty]
     private bool showStrengthCategories;
 
     [ObservableProperty]
@@ -31,6 +34,9 @@ public partial class RecordsViewModel : ObservableObject
 
     [ObservableProperty]
     private bool showEmptyState;
+
+    [ObservableProperty]
+    private bool canGoBack;
 
     [ObservableProperty]
     private string selectedHeader = "Wybierz kategorię rekordów";
@@ -81,6 +87,9 @@ public partial class RecordsViewModel : ObservableObject
         Exercises.Clear();
         StrengthCategories.Clear();
 
+        ShowMainCategories = false;
+        CanGoBack = true;
+
         if (item.Key == "run")
         {
             SelectedHeader = "Rekordy biegowe";
@@ -99,8 +108,6 @@ public partial class RecordsViewModel : ObservableObject
             ShowRecords = false;
             ShowEmptyState = StrengthCategories.Count == 0;
         }
-
-        HighlightMainCategory(item.Key);
     }
 
     [RelayCommand]
@@ -118,12 +125,11 @@ public partial class RecordsViewModel : ObservableObject
         SelectedHeader = $"Ćwiczenia: {item.Title}";
         BuildExercises(item.Key);
 
-        ShowStrengthCategories = true;
+        ShowMainCategories = false;
+        ShowStrengthCategories = false;
         ShowExercises = true;
         ShowRecords = false;
         ShowEmptyState = Exercises.Count == 0;
-
-        HighlightStrengthCategory(item.Key);
     }
 
     [RelayCommand]
@@ -138,12 +144,46 @@ public partial class RecordsViewModel : ObservableObject
         SelectedHeader = $"Rekordy: {item.Title}";
         BuildStrengthExerciseRecords(item.Key);
 
-        ShowStrengthCategories = true;
-        ShowExercises = true;
+        ShowMainCategories = false;
+        ShowStrengthCategories = false;
+        ShowExercises = false;
         ShowRecords = true;
         ShowEmptyState = Records.Count == 0;
+    }
 
-        HighlightExercise(item.Key);
+    [RelayCommand]
+    private void GoBack()
+    {
+        // Jesteśmy na liście rekordów ćwiczenia -> Wracamy do listy ćwiczeń
+        if (ShowRecords && SelectedCategoryKey == "strength")
+        {
+            ShowRecords = false;
+            ShowEmptyState = false;
+            ShowExercises = true;
+            SelectedExercise = string.Empty;
+            SelectedHeader = $"Ćwiczenia: {SelectedStrengthCategory}";
+            ShowEmptyState = Exercises.Count == 0;
+            return;
+        }
+
+        // Jesteśmy na liście ćwiczeń -> Wracamy do listy partii (kategorii siłowych)
+        if (ShowExercises)
+        {
+            ShowExercises = false;
+            ShowEmptyState = false;
+            ShowStrengthCategories = true;
+            SelectedStrengthCategory = string.Empty;
+            SelectedHeader = "Wybierz partię mięśniową";
+            ShowEmptyState = StrengthCategories.Count == 0;
+            return;
+        }
+
+        // Jesteśmy na liście kategorii siłowych albo w rekordach biegowych -> Wracamy na sam początek
+        if (ShowStrengthCategories || (ShowRecords && SelectedCategoryKey == "run"))
+        {
+            ResetView();
+            return;
+        }
     }
 
     [RelayCommand]
@@ -164,10 +204,12 @@ public partial class RecordsViewModel : ObservableObject
         Exercises.Clear();
         Records.Clear();
 
+        ShowMainCategories = true;
         ShowStrengthCategories = false;
         ShowExercises = false;
         ShowRecords = false;
         ShowEmptyState = false;
+        CanGoBack = false;
 
         foreach (var item in Categories)
         {
@@ -462,48 +504,6 @@ public partial class RecordsViewModel : ObservableObject
                 BadgeTextColor = Color.FromArgb("#BE185D")
             });
         }
-    }
-
-    private void HighlightMainCategory(string key)
-    {
-        foreach (var item in Categories)
-        {
-            var selected = item.Key == key;
-
-            item.BackgroundColor = selected ? Color.FromArgb("#0F172A") : Color.FromArgb("#FFFFFF");
-            item.BorderColor = selected ? Color.FromArgb("#0F172A") : Color.FromArgb("#E2E8F0");
-            item.TextColor = selected ? Colors.White : Color.FromArgb("#1E293B");
-        }
-
-        OnPropertyChanged(nameof(Categories));
-    }
-
-    private void HighlightStrengthCategory(string key)
-    {
-        foreach (var item in StrengthCategories)
-        {
-            var selected = item.Key == key;
-
-            item.BackgroundColor = selected ? Color.FromArgb("#FFF7ED") : Color.FromArgb("#FFFFFF");
-            item.BorderColor = selected ? Color.FromArgb("#FDBA74") : Color.FromArgb("#E2E8F0");
-            item.TextColor = selected ? Color.FromArgb("#9A3412") : Color.FromArgb("#1E293B");
-        }
-
-        OnPropertyChanged(nameof(StrengthCategories));
-    }
-
-    private void HighlightExercise(string key)
-    {
-        foreach (var item in Exercises)
-        {
-            var selected = item.Key == key;
-
-            item.BackgroundColor = selected ? Color.FromArgb("#EFF6FF") : Color.FromArgb("#FFFFFF");
-            item.BorderColor = selected ? Color.FromArgb("#93C5FD") : Color.FromArgb("#E2E8F0");
-            item.TextColor = selected ? Color.FromArgb("#1D4ED8") : Color.FromArgb("#1E293B");
-        }
-
-        OnPropertyChanged(nameof(Exercises));
     }
 
     private List<WorkoutSet> DeserializeGymSets(string? json)

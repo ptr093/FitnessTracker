@@ -11,6 +11,7 @@
                              MaximumWidthRequest="720"
                              HorizontalOptions="Center">
 
+            <!-- Nagłówek -->
             <Border StrokeShape="RoundRectangle 22"
                     BackgroundColor="#0F172A"
                     StrokeThickness="0"
@@ -34,18 +35,37 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Button Text="Resetuj wybór"
-                    Command="{Binding ResetSelectionCommand}"
-                    BackgroundColor="White"
-                    TextColor="#1E293B"
-                    BorderColor="#CBD5E1"
-                    BorderWidth="1"
-                    CornerRadius="14"
-                    HeightRequest="48"
-                    FontAttributes="Bold" />
+            <!-- Przyciski nawigacyjne (widoczne tylko, gdy jesteśmy głębiej) -->
+            <Grid ColumnDefinitions="*,*" 
+                  ColumnSpacing="12"
+                  IsVisible="{Binding CanGoBack}">
 
-            <!-- Kategorie główne -->
+                <Button Text="‹ Wróć"
+                        Command="{Binding GoBackCommand}"
+                        BackgroundColor="White"
+                        TextColor="#0F172A"
+                        BorderColor="#CBD5E1"
+                        BorderWidth="1"
+                        CornerRadius="14"
+                        HeightRequest="48"
+                        FontAttributes="Bold" />
+
+                <Button Grid.Column="1"
+                        Text="Od nowa"
+                        Command="{Binding ResetSelectionCommand}"
+                        BackgroundColor="#F8FAFC"
+                        TextColor="#64748B"
+                        BorderColor="#E2E8F0"
+                        BorderWidth="1"
+                        CornerRadius="14"
+                        HeightRequest="48"
+                        FontAttributes="Bold" />
+            </Grid>
+
+            <!-- 1. KATEGORIE GŁÓWNE -->
+            <!-- Dodałem IsVisible, żeby znikały po wybraniu -->
             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Categories}"
+                                 IsVisible="{Binding ShowMainCategories}"
                                  Spacing="12">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
@@ -89,10 +109,10 @@
                 </BindableLayout.ItemTemplate>
             </VerticalStackLayout>
 
-            <!-- Partie siłowe -->
+            <!-- 2. PARTIE SIŁOWE -->
             <VerticalStackLayout IsVisible="{Binding ShowStrengthCategories}"
                                  Spacing="10">
-                <Label Text="Kategorie siłowe"
+                <Label Text="Wybierz partię"
                        FontSize="18"
                        FontAttributes="Bold"
                        TextColor="#1E293B" />
@@ -127,10 +147,10 @@
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
-            <!-- Ćwiczenia -->
+            <!-- 3. ĆWICZENIA -->
             <VerticalStackLayout IsVisible="{Binding ShowExercises}"
                                  Spacing="10">
-                <Label Text="Ćwiczenia"
+                <Label Text="Wybierz ćwiczenie"
                        FontSize="18"
                        FontAttributes="Bold"
                        TextColor="#1E293B" />
@@ -165,7 +185,7 @@
                 </VerticalStackLayout>
             </VerticalStackLayout>
 
-            <!-- Rekordy -->
+            <!-- 4. REKORDY -->
             <CollectionView ItemsSource="{Binding Records}"
                             SelectionMode="None"
                             IsVisible="{Binding ShowRecords}">
@@ -277,6 +297,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
+            <!-- EMPTY STATE -->
             <Border IsVisible="{Binding ShowEmptyState}"
                     StrokeShape="RoundRectangle 18"
                     BackgroundColor="White"
