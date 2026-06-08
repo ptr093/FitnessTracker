@@ -150,6 +150,40 @@
                 </HorizontalStackLayout>
             </Border>
 
+            <!-- KAFELEK: STATYSTYKI I WILKS -->
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="#EEF2FF"
+                    Stroke="#C7D2FE"
+                    StrokeThickness="1"
+                    HeightRequest="120">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToStatsCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#4338CA"
+                            Offset="0,6"
+                            Radius="10"
+                            Opacity="0.12" />
+                </Border.Shadow>
+                <HorizontalStackLayout Padding="25"
+                                       Spacing="20"
+                                       VerticalOptions="Center">
+                    <Label Text="📊"
+                           FontSize="40"
+                           VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center"
+                                         Spacing="2">
+                        <Label Text="Analityka i Wilks"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="#3730A3" />
+                        <Label Text="Sprawdź BMI i współczynnik siły"
+                               FontSize="13"
+                               TextColor="#4F46E5" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
             <!-- SEKCJA SYNC -->
             <Border StrokeShape="RoundRectangle 20"
                     BackgroundColor="#F8FAFC"

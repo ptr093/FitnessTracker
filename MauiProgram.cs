@@ -34,6 +34,8 @@ namespace FitnessTracker
             builder.Services.AddTransient<RecordsViewModel>();
             builder.Services.AddTransient<DashboardViewModel>();
             builder.Services.AddTransient<RunWorkoutViewModel>();
+            builder.Services.AddTransient<StatsViewModel>();
+         
 
             builder.Services.AddTransient<DashboardPage>();
             builder.Services.AddTransient<HistoryPage>();
@@ -42,6 +44,7 @@ namespace FitnessTracker
             builder.Services.AddTransient<RunWorkoutPage>();
             builder.Services.AddTransient<EditGymWorkoutPopup>();
             builder.Services.AddTransient<EditRunWorkoutPopup>();
+            builder.Services.AddTransient<StatsPage>();
 
             return builder.Build();
         }

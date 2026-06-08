@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Views.StatsPage"
+             Title="Analityka"
+             BackgroundColor="#F1F5F9">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,20,20,30"
+                             Spacing="16"
+                             HorizontalOptions="Fill">
+
+            <!-- Nagłówek -->
+            <Border StrokeShape="RoundRectangle 22"
+                    BackgroundColor="#0F172A"
+                    StrokeThickness="0"
+                    Padding="22">
+                <Border.Shadow>
+                    <Shadow Brush="#0F172A" Offset="0,8" Radius="14" Opacity="0.22" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Statystyki i Kalkulatory"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+                    <Label Text="Oblicz BMI i oszacuj swój wynik Wilksa"
+                           FontSize="13"
+                           TextColor="#CBD5E1" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 1. TWOJE DANE -->
+            <Border StrokeShape="RoundRectangle 18" BackgroundColor="White" StrokeThickness="0" Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="#334155" Offset="0,5" Radius="10" Opacity="0.08" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Wymiary ciała" FontSize="18" FontAttributes="Bold" TextColor="#1E293B" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Waga (kg)" FontSize="12" TextColor="#64748B" />
+                            <Entry Keyboard="Numeric" 
+                                   Text="{Binding Weight}" 
+                                   BackgroundColor="#F8FAFC"
+                                   TextColor="#0F172A" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Wzrost (cm)" FontSize="12" TextColor="#64748B" />
+                            <Entry Keyboard="Numeric" 
+                                   Text="{Binding Height}" 
+                                   BackgroundColor="#F8FAFC"
+                                   TextColor="#0F172A" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <HorizontalStackLayout Spacing="10"
+                       VerticalOptions="Center">
+                       
+                        <Label Text="Płeć"
+                       VerticalOptions="Center"
+                       FontSize="14"
+                       TextColor="#1E293B"
+                       WidthRequest="70" />
+
+                        <Picker Title="Wybierz płeć"
+                        ItemsSource="{Binding GenderOptions}"
+                        SelectedItem="{Binding SelectedGender}"
+                        BackgroundColor="#F8FAFC"
+                        TextColor="#0F172A"
+                       ></Picker>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 2. BMI -->
+            <Border StrokeShape="RoundRectangle 18" BackgroundColor="White" StrokeThickness="0" Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="#334155" Offset="0,5" Radius="10" Opacity="0.08" />
+                </Border.Shadow>
+
+                <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="2">
+                        <Label Text="Kalkulator BMI" FontSize="18" FontAttributes="Bold" TextColor="#1E293B" />
+                        <Label Text="{Binding BmiCategory}" FontSize="14" TextColor="{Binding BmiColor}" FontAttributes="Bold" />
+                    </VerticalStackLayout>
+
+                    <Label Grid.Column="1" Text="{Binding Bmi, StringFormat='{0:0.##}'}" FontSize="32" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- 3. RĘCZNE WPROWADZANIE DO WILKSA -->
+            <Border StrokeShape="RoundRectangle 18" BackgroundColor="White" StrokeThickness="0" Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="#334155" Offset="0,5" Radius="10" Opacity="0.08" />
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Kalkulator Wilksa (Maks. ciężar)" FontSize="18" FontAttributes="Bold" TextColor="#1E293B" />
+                    <Label Text="Wpisz podniesiony ciężar oraz liczbę powtórzeń. Aplikacja automatycznie oszacuje Twój wynik na 1 powtórzenie (1RM) i wyliczy punkty." 
+                           FontSize="12" TextColor="#64748B" />
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Ciężar (kg)" FontSize="12" FontAttributes="Bold" TextColor="#1E293B" />
+                            <Entry Keyboard="Numeric" 
+                                   Text="{Binding LiftedWeight}" 
+                                   BackgroundColor="#F8FAFC"
+                                   TextColor="#0F172A" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Powtórzenia" FontSize="12" FontAttributes="Bold" TextColor="#1E293B" />
+                            <Entry Keyboard="Numeric" 
+                                   Text="{Binding Reps}" 
+                                   BackgroundColor="#F8FAFC"
+                                   TextColor="#0F172A" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 4. WYNIK WILKSA -->
+            <Border StrokeShape="RoundRectangle 18" BackgroundColor="#0F172A" StrokeThickness="0" Padding="20">
+                <Border.Shadow>
+                    <Shadow Brush="#0F172A" Offset="0,5" Radius="10" Opacity="0.2" />
+                </Border.Shadow>
+
+                <Grid ColumnDefinitions="*,*">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Szacowany 1RM (Maks)" FontSize="12" TextColor="#CBD5E1" />
+                        <Label Text="{Binding EstimatedOneRepMax, StringFormat='{0:0.##} kg'}" FontSize="22" FontAttributes="Bold" TextColor="White" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="End">
+                        <Label Text="Punkty Wilksa" FontSize="12" TextColor="#CBD5E1" HorizontalOptions="End" />
+                        <Label Text="{Binding WilksScore, StringFormat='{0:0.##}'}" FontSize="24" FontAttributes="Bold" TextColor="#FDBA74" HorizontalOptions="End" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

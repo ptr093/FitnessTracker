@@ -25,7 +25,10 @@ public partial class DashboardViewModel : ObservableObject
         _databaseService = databaseService;
         _apiService = apiService;
     }
+    
 
+    [RelayCommand]
+    private async Task GoToStatsAsync() => await Shell.Current.GoToAsync("StatsPage");
     [RelayCommand]
     private async Task GoToGymAsync() => await Shell.Current.GoToAsync("GymWorkoutPage");
 
