@@ -8,8 +8,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="20,20,20,30"
                              Spacing="16"
-                             MaximumWidthRequest="720"
-                             HorizontalOptions="Center">
+                             HorizontalOptions="Fill">
 
             <!-- Nagłówek -->
             <Border StrokeShape="RoundRectangle 22"
@@ -66,42 +65,58 @@
             <!-- Dodałem IsVisible, żeby znikały po wybraniu -->
             <VerticalStackLayout BindableLayout.ItemsSource="{Binding Categories}"
                                  IsVisible="{Binding ShowMainCategories}"
-                                 Spacing="12">
+                                 Spacing="16">
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
-                        <Border StrokeShape="RoundRectangle 18"
+                        <Border StrokeShape="RoundRectangle 20"
                                 BackgroundColor="{Binding BackgroundColor}"
                                 Stroke="{Binding BorderColor}"
                                 StrokeThickness="1"
-                                Padding="18">
+                                Padding="20">
+
+                            <Border.Shadow>
+                                <Shadow Brush="#334155"
+                                        Offset="0,5"
+                                        Radius="8"
+                                        Opacity="0.05" />
+                            </Border.Shadow>
+
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectCategoryCommand}"
                                                       CommandParameter="{Binding .}" />
                             </Border.GestureRecognizers>
 
                             <Grid ColumnDefinitions="Auto,*,Auto"
-                                  ColumnSpacing="14">
-                                <Label Text="{Binding Icon}"
-                                       FontSize="28"
-                                       VerticalOptions="Center" />
+                                  ColumnSpacing="18">
+
+                                <Border BackgroundColor="#F8FAFC"
+                                        StrokeThickness="0"
+                                        StrokeShape="RoundRectangle 16"
+                                        Padding="14"
+                                        VerticalOptions="Center">
+                                    <Label Text="{Binding Icon}"
+                                           FontSize="32" />
+                                </Border>
 
                                 <VerticalStackLayout Grid.Column="1"
-                                                     Spacing="4">
+                                                     Spacing="4"
+                                                     VerticalOptions="Center">
                                     <Label Text="{Binding Title}"
-                                           FontSize="18"
+                                           FontSize="20"
                                            FontAttributes="Bold"
                                            TextColor="{Binding TextColor}" />
 
                                     <Label Text="{Binding Subtitle}"
-                                           FontSize="13"
+                                           FontSize="14"
                                            TextColor="{Binding TextColor}"
                                            Opacity="0.75" />
                                 </VerticalStackLayout>
 
                                 <Label Grid.Column="2"
                                        Text="›"
-                                       FontSize="26"
+                                       FontSize="30"
                                        TextColor="{Binding TextColor}"
+                                       Opacity="0.4"
                                        VerticalOptions="Center" />
                             </Grid>
                         </Border>
@@ -125,7 +140,7 @@
                                     BackgroundColor="{Binding BackgroundColor}"
                                     Stroke="{Binding BorderColor}"
                                     StrokeThickness="1"
-                                    Padding="16">
+                                    Padding="18">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectStrengthCategoryCommand}"
                                                           CommandParameter="{Binding .}" />
@@ -133,11 +148,11 @@
 
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="{Binding Title}"
-                                           FontSize="16"
+                                           FontSize="18"
                                            FontAttributes="Bold"
                                            TextColor="{Binding TextColor}" />
                                     <Label Text="{Binding Subtitle}"
-                                           FontSize="12"
+                                           FontSize="13"
                                            TextColor="{Binding TextColor}"
                                            Opacity="0.75" />
                                 </VerticalStackLayout>
@@ -163,7 +178,7 @@
                                     BackgroundColor="{Binding BackgroundColor}"
                                     Stroke="{Binding BorderColor}"
                                     StrokeThickness="1"
-                                    Padding="16">
+                                    Padding="18">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectExerciseCommand}"
                                                           CommandParameter="{Binding .}" />
@@ -171,11 +186,11 @@
 
                                 <VerticalStackLayout Spacing="4">
                                     <Label Text="{Binding Title}"
-                                           FontSize="16"
+                                           FontSize="18"
                                            FontAttributes="Bold"
                                            TextColor="{Binding TextColor}" />
                                     <Label Text="{Binding Subtitle}"
-                                           FontSize="12"
+                                           FontSize="13"
                                            TextColor="{Binding TextColor}"
                                            Opacity="0.75" />
                                 </VerticalStackLayout>
