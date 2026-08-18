@@ -50,6 +50,40 @@
                 </HorizontalStackLayout>
             </Border>
 
+            <!-- KAFELEK: MOJE ĆWICZENIA -->
+            <Border StrokeShape="RoundRectangle 20"
+        BackgroundColor="#F1F5F9"
+        Stroke="#CBD5E1"
+        StrokeThickness="1"
+        HeightRequest="120">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToManageExercisesCommand}" />
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#334155"
+                Offset="0,6"
+                Radius="10"
+                Opacity="0.08" />
+                </Border.Shadow>
+                <HorizontalStackLayout Padding="25"
+                           Spacing="20"
+                           VerticalOptions="Center">
+                    <Label Text="🛠️"
+               FontSize="40"
+               VerticalOptions="Center" />
+                    <VerticalStackLayout VerticalOptions="Center"
+                             Spacing="2">
+                        <Label Text="Moje ćwiczenia"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#1E293B" />
+                        <Label Text="Edytuj i usuwaj własne ćwiczenia"
+                   FontSize="13"
+                   TextColor="#64748B" />
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
             <!-- KAFELEK: BIEGANIE -->
             <Border StrokeShape="RoundRectangle 20"
                     BackgroundColor="#064E3B"

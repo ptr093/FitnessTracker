@@ -80,6 +80,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\ManageExercisesPage.xaml.cs">
+	    <DependentUpon>ManageExercisesPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\NewPersonalRecordPopup.xaml.cs">
 	    <DependentUpon>NewPersonalRecordPopup.xaml</DependentUpon>
 	  </Compile>
@@ -107,7 +110,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\DashboardPage - kopiować.xaml">
+	  <MauiXaml Update="Views\ManageExercisesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\NewPersonalRecordPopup.xaml">

@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Views.ManageExercisesPage"
+             Title="Moje ćwiczenia"
+             BackgroundColor="#F1F5F9">
+
+    <Grid RowDefinitions="Auto,Auto,*"
+          RowSpacing="0">
+
+        <!-- INFORMACJA -->
+        <Border Grid.Row="0"
+                Margin="15,15,15,12"
+                Padding="16"
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 18">
+
+            <Label Text="Tutaj możesz edytować lub usuwać własne ćwiczenia. Zmiany dotyczą listy wyboru; zapisane treningi pozostają w historii."
+                   FontSize="13"
+                   TextColor="#64748B"
+                   LineBreakMode="WordWrap" />
+        </Border>
+
+        <!-- FILTR PARTII -->
+        <VerticalStackLayout Grid.Row="1"
+                             Margin="15,0,15,16"
+                             Spacing="6">
+
+            <Label Text="PARTIA MIĘŚNIOWA"
+                   FontSize="12"
+                   FontAttributes="Bold"
+                   TextColor="#64748B" />
+
+            <Border HeightRequest="58"
+                    Padding="12,0"
+                    BackgroundColor="White"
+                    Stroke="#E2E8F0"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 14">
+
+                <Picker ItemsSource="{Binding Categories}"
+                        SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                        Title="Wybierz partię"
+                        TextColor="#0F172A"
+                        FontAttributes="Bold"
+                        HeightRequest="56"
+                        VerticalOptions="Center"
+                        BackgroundColor="Transparent" />
+            </Border>
+        </VerticalStackLayout>
+
+        <!-- LISTA ĆWICZEŃ -->
+        <CollectionView Grid.Row="2"
+                        Margin="15,0,15,20"
+                        ItemsSource="{Binding VisibleExercises}"
+                        SelectionMode="None"
+                        VerticalOptions="Fill">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="30"
+                                     Spacing="8"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
+
+                    <Label Text="Brak własnych ćwiczeń"
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#334155"
+                           HorizontalTextAlignment="Center" />
+
+                    <Label Text="Dodaj własne ćwiczenie podczas rejestracji treningu siłowego."
+                           FontSize="13"
+                           TextColor="#64748B"
+                           HorizontalTextAlignment="Center"
+                           LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="0,0,0,10"
+                            Padding="12"
+                            MinimumHeightRequest="64"
+                            BackgroundColor="White"
+                            Stroke="#E2E8F0"
+                            StrokeThickness="1"
+                            StrokeShape="RoundRectangle 14">
+
+                        <Grid ColumnDefinitions="*,Auto,Auto"
+                              ColumnSpacing="10"
+                              VerticalOptions="Center">
+
+                            <Label Grid.Column="0"
+                                   Text="{Binding Name}"
+                                   FontSize="14"
+                                   TextColor="#1E293B"
+                                   VerticalOptions="Center"
+                                   LineBreakMode="TailTruncation" />
+
+                            <Button Grid.Column="1"
+                                    Text="Edytuj"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                      Path=BindingContext.EditExerciseCommand}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="#EFF6FF"
+                                    TextColor="#2563EB"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    CornerRadius="12"
+                                    HeightRequest="44"
+                                    Padding="14,0" />
+
+                            <Button Grid.Column="2"
+                                    Text="Usuń"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                      Path=BindingContext.DeleteExerciseCommand}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="#FFF1F2"
+                                    TextColor="#E11D48"
+                                    FontAttributes="Bold"
+                                    CornerRadius="12"
+                                    HeightRequest="44"
+                                    Padding="14,0" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
