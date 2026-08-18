@@ -107,6 +107,28 @@
 
                 </VerticalStackLayout>
             </Border>
+            <!-- LOKALIZACJA -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Lokalizacja (opcjonalnie)"
+           FontSize="12"
+           TextColor="#64748B"
+           FontAttributes="Bold"
+           TextTransform="Uppercase" />
+
+                <Border StrokeShape="RoundRectangle 12"
+            BackgroundColor="#F8FAFC"
+            Stroke="#E2E8F0"
+            StrokeThickness="1"
+            Padding="12,0">
+                    <Entry Text="{Binding Location, Mode=TwoWay}"
+               Placeholder="np. CityFit Warszawa, dom"
+               TextColor="#0F172A"
+               PlaceholderColor="#94A3B8"
+               BackgroundColor="Transparent"
+               HeightRequest="48"
+               ClearButtonVisibility="WhileEditing" />
+                </Border>
+            </VerticalStackLayout>
 
             <!-- KARTA: SERIE -->
             <Border StrokeShape="RoundRectangle 18"

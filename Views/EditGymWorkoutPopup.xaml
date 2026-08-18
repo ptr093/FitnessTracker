@@ -14,7 +14,7 @@
         <Grid RowDefinitions="Auto,*,Auto"
               RowSpacing="0">
 
-            <!-- HEADER -->
+            <!-- NAGŁÓWEK -->
             <Border Grid.Row="0"
                     BackgroundColor="#0F172A"
                     StrokeThickness="0"
@@ -26,32 +26,37 @@
                            FontAttributes="Bold"
                            TextColor="White" />
 
-                    <Label Text="Popraw datę, ćwiczenie i serie przed zapisaniem zmian."
+                    <Label Text="Popraw dane treningu i serie przed zapisaniem zmian."
                            FontSize="12"
                            TextColor="#CBD5E1" />
                 </VerticalStackLayout>
             </Border>
 
-            <!-- CONTENT -->
+            <!-- TREŚĆ -->
             <ScrollView Grid.Row="1"
-                        HeightRequest="460">
+                        HeightRequest="520">
                 <VerticalStackLayout Padding="20"
                                      Spacing="14">
 
+                    <!-- DATA -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Data treningu"
                                FontSize="12"
                                FontAttributes="Bold"
                                TextColor="#64748B" />
-                        <Border StrokeShape="RoundRectangle 12"
+
+                        <Border HeightRequest="54"
+                                StrokeShape="RoundRectangle 12"
                                 BackgroundColor="#F8FAFC"
                                 Stroke="#E2E8F0"
                                 StrokeThickness="1"
-                                Padding="12,6">
+                                Padding="10,0">
                             <DatePicker x:Name="WorkoutDatePicker"
                                         Format="dd MMM yyyy"
                                         TextColor="#0F172A"
                                         BackgroundColor="Transparent"
+                                        HeightRequest="52"
+                                        VerticalOptions="Center"
                                         MaximumDate="2100-12-31"
                                         MinimumDate="2000-01-01" />
                         </Border>
@@ -59,46 +64,83 @@
 
                     <!-- PARTIA -->
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Partia"
-           FontSize="12"
-           FontAttributes="Bold"
-           TextColor="#64748B" />
-                        <Border StrokeShape="RoundRectangle 12"
-            BackgroundColor="#F8FAFC"
-            Stroke="#E2E8F0"
-            StrokeThickness="1"
-            Padding="10,0">
+                        <Label Text="Partia mięśniowa"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#64748B" />
+
+                        <Border HeightRequest="54"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="4,0">
                             <Picker x:Name="CategoryPicker"
-                TextColor="#0F172A"
-                BackgroundColor="Transparent"
-                HeightRequest="46" />
+                                    TextColor="#0F172A"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="52"
+                                    FontSize="14"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Fill" />
                         </Border>
                     </VerticalStackLayout>
 
                     <!-- ĆWICZENIE -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Ćwiczenie"
-           FontSize="12"
-           FontAttributes="Bold"
-           TextColor="#64748B" />
-                        <Border StrokeShape="RoundRectangle 12"
-            BackgroundColor="#F8FAFC"
-            Stroke="#E2E8F0"
-            StrokeThickness="1"
-            Padding="10,0">
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#64748B" />
+
+                        <Border HeightRequest="54"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="4,0">
                             <Picker x:Name="ExercisePicker"
-                TextColor="#0F172A"
-                BackgroundColor="Transparent"
-                HeightRequest="46" />
+                                    TextColor="#0F172A"
+                                    BackgroundColor="Transparent"
+                                    HeightRequest="52"
+                                    FontSize="14"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="Fill" />
                         </Border>
                     </VerticalStackLayout>
 
-                    <Grid ColumnDefinitions="*,Auto"
-                          ColumnSpacing="10">
-                        <Label Text="Serie"
+                    <!-- LOKALIZACJA -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Lokalizacja (opcjonalnie)"
                                FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#64748B"
+                               TextColor="#64748B" />
+
+                        <Border HeightRequest="54"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="#F8FAFC"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                Padding="10,0">
+                            <Entry x:Name="LocationEntry"
+                                   Placeholder="np. CityFit Warszawa, dom"
+                                   TextColor="#0F172A"
+                                   PlaceholderColor="#94A3B8"
+                                   BackgroundColor="Transparent"
+                                   HeightRequest="52"
+                                   VerticalOptions="Center"
+                                   ClearButtonVisibility="WhileEditing" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- NAGŁÓWEK SEKCJI SERII -->
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="10"
+                          Margin="0,4,0,0">
+
+                        <Label Text="Serie"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="#0F172A"
                                VerticalOptions="Center" />
 
                         <Button Grid.Column="1"
@@ -112,31 +154,37 @@
                                 Padding="14,0" />
                     </Grid>
 
+                    <!-- LISTA SERII -->
                     <VerticalStackLayout x:Name="SetsContainer"
                                          Spacing="10" />
+
                 </VerticalStackLayout>
             </ScrollView>
 
-            <!-- FOOTER -->
+            <!-- STOPKA -->
             <Border Grid.Row="2"
                     BackgroundColor="White"
                     StrokeThickness="0"
                     Padding="16,14">
                 <HorizontalStackLayout Spacing="12"
                                        HorizontalOptions="End">
+
                     <Button Text="Anuluj"
                             Clicked="OnCancelClicked"
                             BackgroundColor="#E2E8F0"
                             TextColor="#0F172A"
                             CornerRadius="12"
-                            HeightRequest="44" />
+                            HeightRequest="44"
+                            Padding="16,0" />
 
                     <Button Text="Zapisz"
                             Clicked="OnSaveClicked"
                             BackgroundColor="#0F172A"
                             TextColor="White"
                             CornerRadius="12"
-                            HeightRequest="44" />
+                            HeightRequest="44"
+                            Padding="16,0" />
+
                 </HorizontalStackLayout>
             </Border>
 

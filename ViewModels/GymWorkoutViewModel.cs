@@ -32,6 +32,9 @@ namespace FitnessTracker.ViewModels
 
         public ObservableCollection<string> AvailableExercises { get; } = new();
         public ObservableCollection<WorkoutSet> Sets { get; } = new();
+        
+        [ObservableProperty]
+        private string? location;
 
         [ObservableProperty]
         private string selectedCategory;
@@ -258,7 +261,11 @@ namespace FitnessTracker.ViewModels
                 Category = SelectedCategory,
                 Exercise = SelectedExercise,
                 GymSetsJson = JsonSerializer.Serialize(validSets),
-                Date = DateTime.Now
+                Date = DateTime.Now,
+                Location = string.IsNullOrWhiteSpace(Location)
+        ? null
+        : Location.Trim()
+
             };
 
             var record = await _databaseService.GetExerciseRecordAsync(SelectedExercise);

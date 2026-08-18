@@ -30,6 +30,7 @@ namespace FitnessTracker.Models
         public string Category { get; set; } = string.Empty;
         public string Exercise { get; set; } = string.Empty;
         public string GymSetsJson { get; set; } = "[]";
+        public string? Location { get; set; }
 
         [Ignore]
         public string Summary
