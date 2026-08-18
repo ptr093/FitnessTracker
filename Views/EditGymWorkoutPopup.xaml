@@ -57,37 +57,39 @@
                         </Border>
                     </VerticalStackLayout>
 
+                    <!-- PARTIA -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Partia"
-                               FontSize="12"
-                               FontAttributes="Bold"
-                               TextColor="#64748B" />
+           FontSize="12"
+           FontAttributes="Bold"
+           TextColor="#64748B" />
                         <Border StrokeShape="RoundRectangle 12"
-                                BackgroundColor="#F8FAFC"
-                                Stroke="#E2E8F0"
-                                StrokeThickness="1"
-                                Padding="10,0">
-                            <Entry x:Name="CategoryEntry"
-                                   TextColor="#0F172A"
-                                   BackgroundColor="Transparent"
-                                   HeightRequest="46" />
+            BackgroundColor="#F8FAFC"
+            Stroke="#E2E8F0"
+            StrokeThickness="1"
+            Padding="10,0">
+                            <Picker x:Name="CategoryPicker"
+                TextColor="#0F172A"
+                BackgroundColor="Transparent"
+                HeightRequest="46" />
                         </Border>
                     </VerticalStackLayout>
 
+                    <!-- ĆWICZENIE -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Ćwiczenie"
-                               FontSize="12"
-                               FontAttributes="Bold"
-                               TextColor="#64748B" />
+           FontSize="12"
+           FontAttributes="Bold"
+           TextColor="#64748B" />
                         <Border StrokeShape="RoundRectangle 12"
-                                BackgroundColor="#F8FAFC"
-                                Stroke="#E2E8F0"
-                                StrokeThickness="1"
-                                Padding="10,0">
-                            <Entry x:Name="ExerciseEntry"
-                                   TextColor="#0F172A"
-                                   BackgroundColor="Transparent"
-                                   HeightRequest="46" />
+            BackgroundColor="#F8FAFC"
+            Stroke="#E2E8F0"
+            StrokeThickness="1"
+            Padding="10,0">
+                            <Picker x:Name="ExercisePicker"
+                TextColor="#0F172A"
+                BackgroundColor="Transparent"
+                HeightRequest="46" />
                         </Border>
                     </VerticalStackLayout>
 

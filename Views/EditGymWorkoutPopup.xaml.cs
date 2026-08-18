@@ -3,6 +3,7 @@ using FitnessTracker.Models;
 using Microsoft.Maui.Controls.Shapes;
 using System.Globalization;
 using System.Text.Json;
+using Microsoft.Maui.Storage;
 
 namespace FitnessTracker.Views;
 
@@ -12,6 +13,10 @@ public partial class EditGymWorkoutPopup : Popup
     private readonly Func<Workout, Task> _onSave;
     private readonly List<WorkoutSet> _sets;
 
+    // Baza ćwiczeń (tak samo jak w GymWorkoutViewModel)
+    private Dictionary<string, List<string>> _exercisesDatabase = new();
+    private Dictionary<string, List<string>> _customUserExercises = new();
+
     public EditGymWorkoutPopup(Workout workout, Func<Workout, Task> onSave)
     {
         InitializeComponent();
@@ -19,8 +24,9 @@ public partial class EditGymWorkoutPopup : Popup
         _workout = workout;
         _onSave = onSave;
 
-        CategoryEntry.Text = workout.Category;
-        ExerciseEntry.Text = workout.Exercise;
+        LoadExercises();
+        InitializePickers();
+
         WorkoutDatePicker.Date = workout.Date == default ? DateTime.Today : workout.Date;
 
         _sets = string.IsNullOrWhiteSpace(workout.GymSetsJson)
@@ -40,6 +46,172 @@ public partial class EditGymWorkoutPopup : Popup
         NormalizeSetNumbers();
         RenderSets();
     }
+
+    // --- Ładowanie ćwiczeń (kopia logiki z GymWorkoutViewModel) ---
+
+    private void LoadExercises()
+    {
+        _exercisesDatabase = new Dictionary<string, List<string>>
+        {
+            { "Klatka piersiowa", new List<string> { "🏋️ Wyciskanie sztangi leżąc", "🏋️ Wyciskanie sztangi skos górny", "🔩 Wyciskanie hantli leżąc", "🔩 Wyciskanie hantli skos", "🤖 Hammer (Wyciskanie maszyna)", "🦋 Rozpiętki hantlami", "🦾 Pompki na poręczach (Dips)" } },
+            { "Plecy", new List<string> { "🦅 Ściąganie drążka (Lat Pulldown)", "🦅 Ściąganie chwytu wyciągu górnego po skosie", "🚣 Wiosłowanie sztangą", "🚣 Przyciąganie linki wyciągu dolnego siedząc", "🧗 Podciąganie na drążku", "🔥 Martwy ciąg" } },
+            { "Nogi", new List<string> { "🦵 Przysiad ze sztangą (Squat)", "🏗️ Wyciskanie na suwnicy", "🍑 Hip Thrust (Unoszenie bioder)", "🚶 Wykroki", "🦵 Uginanie nóg na maszynie", "🦵 Wznosy na łydki" } },
+            { "Barki", new List<string>
+                {
+                 "🛡️ Wyciskanie żołnierskie (OHP)",
+                 "🔩 Wyciskanie hantli siedząc",
+                 "🦅 Wznosy bokiem",
+                 "🦅 Wznosy w opadzie",
+                 "🦋 Odwodzenie ramion na maszynie Butterfly odwrotnie (Rear Delt Fly)",
+                 "🎯 Face pulls",
+                 "⬆️ Unoszenie hantli w przód"
+                }
+            },
+            { "Ramiona", new List<string> { "💪 Uginanie ze sztangą (Biceps)", "🔨 Uginanie młotkowe", "💪 Wyciskanie francuskie", "🪢 Prostowanie z linką wyciągu" } },
+            { "Brzuch", new List<string> { "🍫 Allahy (Crunches z linką)", "🚲 Rowerek", "🛹 Deska (Plank)", "🧗 Unoszenie nóg w zwisie" } }
+        };
+
+        string savedCustomJson = Preferences.Default.Get("CustomUserExercisesDB", string.Empty);
+
+        if (!string.IsNullOrEmpty(savedCustomJson))
+        {
+            try
+            {
+                _customUserExercises = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(savedCustomJson) ?? new();
+
+                foreach (var category in _customUserExercises)
+                {
+                    if (_exercisesDatabase.ContainsKey(category.Key))
+                    {
+                        foreach (var customEx in category.Value)
+                        {
+                            if (!_exercisesDatabase[category.Key].Contains(customEx))
+                                _exercisesDatabase[category.Key].Add(customEx);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                _customUserExercises = new Dictionary<string, List<string>>();
+            }
+        }
+    }
+
+    private void SaveCustomExercise(string category, string newExercise)
+    {
+        if (_exercisesDatabase.ContainsKey(category) && !_exercisesDatabase[category].Contains(newExercise))
+        {
+            _exercisesDatabase[category].Add(newExercise);
+        }
+
+        if (!_customUserExercises.ContainsKey(category))
+            _customUserExercises[category] = new List<string>();
+
+        if (!_customUserExercises[category].Contains(newExercise))
+        {
+            _customUserExercises[category].Add(newExercise);
+            string json = JsonSerializer.Serialize(_customUserExercises);
+            Preferences.Default.Set("CustomUserExercisesDB", json);
+        }
+    }
+
+    // --- Inicjalizacja Pickerów ---
+
+    private void InitializePickers()
+    {
+        // Partie
+        foreach (var category in _exercisesDatabase.Keys)
+        {
+            CategoryPicker.Items.Add(category);
+        }
+
+        // Ustawienie aktualnej partii
+        var currentCategory = string.IsNullOrWhiteSpace(_workout.Category)
+            ? null
+            : _exercisesDatabase.Keys.FirstOrDefault(k => k == _workout.Category);
+
+        if (currentCategory != null)
+            CategoryPicker.SelectedItem = currentCategory;
+
+        // Obsługa zmiany partii
+        CategoryPicker.SelectedIndexChanged += (s, e) =>
+        {
+            var selectedCategory = CategoryPicker.SelectedItem as string;
+            ExercisePicker.Items.Clear();
+
+            if (selectedCategory == null || !_exercisesDatabase.ContainsKey(selectedCategory))
+                return;
+
+            foreach (var ex in _exercisesDatabase[selectedCategory])
+            {
+                ExercisePicker.Items.Add(ex);
+            }
+
+            ExercisePicker.Items.Add("➕ Dodaj własne ćwiczenie...");
+
+            // Ustawienie aktualnego ćwiczenia
+            var currentExercise = string.IsNullOrWhiteSpace(_workout.Exercise)
+                ? null
+                : _exercisesDatabase[selectedCategory].FirstOrDefault(x => x == _workout.Exercise);
+
+            ExercisePicker.SelectedItem = currentExercise ?? ExercisePicker.Items.FirstOrDefault();
+        };
+
+        // Obsługa dodawania własnego ćwiczenia
+        ExercisePicker.SelectedIndexChanged += (s, e) =>
+        {
+            var selectedExercise = ExercisePicker.SelectedItem as string;
+
+            if (selectedExercise == "➕ Dodaj własne ćwiczenie...")
+            {
+                PromptForCustomExerciseAsync();
+            }
+        };
+    }
+
+    private async void PromptForCustomExerciseAsync()
+    {
+        if (App.Current?.MainPage == null) return;
+
+        string result = await App.Current.MainPage.DisplayPromptAsync(
+            "Nowe ćwiczenie",
+            "Podaj nazwę własnego ćwiczenia:",
+            "Dodaj", "Anuluj",
+            "np. Przyciąganie jednorącz");
+
+        if (!string.IsNullOrWhiteSpace(result))
+        {
+            string newExercise = $"⭐ {result.Trim()}";
+            string currentCategory = CategoryPicker.SelectedItem as string;
+
+            if (!string.IsNullOrEmpty(currentCategory))
+            {
+                SaveCustomExercise(currentCategory, newExercise);
+            }
+
+            // Odśwież listę ćwiczeń
+            ExercisePicker.Items.Clear();
+
+            if (!string.IsNullOrEmpty(currentCategory) && _exercisesDatabase.ContainsKey(currentCategory))
+            {
+                foreach (var item in _exercisesDatabase[currentCategory])
+                {
+                    ExercisePicker.Items.Add(item);
+                }
+            }
+            ExercisePicker.Items.Add("➕ Dodaj własne ćwiczenie...");
+
+            ExercisePicker.SelectedItem = newExercise;
+        }
+        else
+        {
+            // Wróć do poprzedniego wyboru
+            ExercisePicker.SelectedItem = ExercisePicker.Items.FirstOrDefault(x => x != "➕ Dodaj własne ćwiczenie...");
+        }
+    }
+
+    // --- Renderowanie serii (bez zmian w logice) ---
 
     private void RenderSets()
     {
@@ -257,18 +429,18 @@ public partial class EditGymWorkoutPopup : Popup
 
     private async void OnSaveClicked(object sender, EventArgs e)
     {
-        var category = CategoryEntry.Text?.Trim() ?? string.Empty;
-        var exercise = ExerciseEntry.Text?.Trim() ?? string.Empty;
+        var category = CategoryPicker.SelectedItem as string ?? string.Empty;
+        var exercise = ExercisePicker.SelectedItem as string ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(category))
         {
-            await ShowValidationAlert("Uzupełnij partię mięśniową.");
+            await ShowValidationAlert("Wybierz partię mięśniową.");
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(exercise))
+        if (string.IsNullOrWhiteSpace(exercise) || exercise == "➕ Dodaj własne ćwiczenie...")
         {
-            await ShowValidationAlert("Uzupełnij nazwę ćwiczenia.");
+            await ShowValidationAlert("Wybierz ćwiczenie.");
             return;
         }
 
