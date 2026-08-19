@@ -26,8 +26,11 @@ public partial class DashboardViewModel : ObservableObject
         _apiService = apiService;
     }
 
-    [RelayCommand]
    
+    [RelayCommand]
+    private async Task GoToWorkoutTemplatesAsync() => await Shell.Current.GoToAsync("WorkoutTemplatesPage");
+
+    [RelayCommand]
     private async Task GoToManageExercisesAsync() => await Shell.Current.GoToAsync("ManageExPage");
 
     [RelayCommand]

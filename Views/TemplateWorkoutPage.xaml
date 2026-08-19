@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Views.TemplateWorkoutPage"
+             Title="Trening z szablonu"
+             BackgroundColor="#F1F5F9">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="15,20,15,30"
+                                 Spacing="16"
+                                 MaximumWidthRequest="620"
+                                 HorizontalOptions="Center">
+
+                <Border StrokeShape="RoundRectangle 20"
+                        BackgroundColor="#0F766E"
+                        StrokeThickness="0"
+                        Padding="20">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="{Binding TemplateName}"
+                               FontSize="23"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="Wartości pochodzą z ostatniego treningu. Możesz je zmienić lub pominąć wybrane ćwiczenie."
+                               FontSize="13"
+                               TextColor="#CCFBF1" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border StrokeShape="RoundRectangle 18"
+                        BackgroundColor="White"
+                        Stroke="#E2E8F0"
+                        StrokeThickness="1"
+                        Padding="18">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="SZCZEGÓŁY TRENINGU"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="#64748B" />
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Data"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#64748B" />
+                            <Border StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeThickness="1"
+                                    Padding="10,0">
+                                <DatePicker Date="{Binding WorkoutDate, Mode=TwoWay}"
+                                            Format="dd MMM yyyy"
+                                            MinimumDate="2000-01-01"
+                                            MaximumDate="2100-12-31"
+                                            TextColor="#0F172A"
+                                            BackgroundColor="Transparent"
+                                            HeightRequest="46" />
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Lokalizacja (opcjonalnie)"
+                                   FontSize="12"
+                                   FontAttributes="Bold"
+                                   TextColor="#64748B" />
+                            <Border StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="#F8FAFC"
+                                    Stroke="#E2E8F0"
+                                    StrokeThickness="1"
+                                    Padding="10,0">
+                                <Entry Text="{Binding Location, Mode=TwoWay}"
+                                       Placeholder="np. CityFit Warszawa, dom"
+                                       PlaceholderColor="#94A3B8"
+                                       TextColor="#0F172A"
+                                       BackgroundColor="Transparent"
+                                       HeightRequest="46"
+                                       ClearButtonVisibility="WhileEditing" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- LISTA ĆWICZEŃ -->
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Exercises}"
+                                     Spacing="16">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeShape="RoundRectangle 18"
+                                    BackgroundColor="White"
+                                    Stroke="#E2E8F0"
+                                    StrokeThickness="1"
+                                    Padding="16">
+                                <VerticalStackLayout Spacing="12">
+
+                                    <Grid ColumnDefinitions="*,Auto,Auto"
+                                          ColumnSpacing="8">
+                                        <VerticalStackLayout Grid.Column="0"
+                                                             Spacing="3">
+                                            <Label Text="{Binding Exercise}"
+                                                   FontSize="17"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#0F172A"
+                                                   LineBreakMode="TailTruncation" />
+                                            <Label Text="{Binding Category}"
+                                                   FontSize="12"
+                                                   TextColor="#64748B" />
+                                        </VerticalStackLayout>
+
+                                        <Button Grid.Column="1"
+                                                Text="+ Seria"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddSetCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#EFF6FF"
+                                                TextColor="#2563EB"
+                                                FontAttributes="Bold"
+                                                CornerRadius="10"
+                                                HeightRequest="38"
+                                                Padding="12,0" />
+
+                                        <Button Grid.Column="2"
+                                                Text="Pomiń"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveExerciseCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#FFF1F2"
+                                                TextColor="#E11D48"
+                                                FontAttributes="Bold"
+                                                CornerRadius="10"
+                                                HeightRequest="38"
+                                                Padding="12,0" />
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="42,*,*,42"
+                                          ColumnSpacing="8">
+                                        <Label Text="SET"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#64748B"
+                                               HorizontalTextAlignment="Center" />
+                                        <Label Grid.Column="1"
+                                               Text="KG"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#64748B"
+                                               HorizontalTextAlignment="Center" />
+                                        <Label Grid.Column="2"
+                                               Text="POWT."
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#64748B"
+                                               HorizontalTextAlignment="Center" />
+                                    </Grid>
+
+                                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Sets}"
+                                                         Spacing="8">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ColumnDefinitions="42,*,*,42"
+                                                      ColumnSpacing="8">
+                                                    <Border StrokeShape="RoundRectangle 10"
+                                                            BackgroundColor="#E2E8F0"
+                                                            StrokeThickness="0"
+                                                            HeightRequest="42">
+                                                        <Label Text="{Binding SetNumber}"
+                                                               FontAttributes="Bold"
+                                                               TextColor="#334155"
+                                                               HorizontalOptions="Center"
+                                                               VerticalOptions="Center" />
+                                                    </Border>
+
+                                                    <Border Grid.Column="1"
+                                                            StrokeShape="RoundRectangle 10"
+                                                            BackgroundColor="#F8FAFC"
+                                                            Stroke="#CBD5E1"
+                                                            StrokeThickness="1"
+                                                            Padding="8,0">
+                                                        <Entry Text="{Binding Weight, Mode=TwoWay}"
+                                                               Keyboard="Numeric"
+                                                               HorizontalTextAlignment="Center"
+                                                               TextColor="#0F172A"
+                                                               FontAttributes="Bold"
+                                                               BackgroundColor="Transparent"
+                                                               HeightRequest="42" />
+                                                    </Border>
+
+                                                    <Border Grid.Column="2"
+                                                            StrokeShape="RoundRectangle 10"
+                                                            BackgroundColor="#F8FAFC"
+                                                            Stroke="#CBD5E1"
+                                                            StrokeThickness="1"
+                                                            Padding="8,0">
+                                                        <Entry Text="{Binding Reps, Mode=TwoWay}"
+                                                               Keyboard="Numeric"
+                                                               HorizontalTextAlignment="Center"
+                                                               TextColor="#0F172A"
+                                                               FontAttributes="Bold"
+                                                               BackgroundColor="Transparent"
+                                                               HeightRequest="42" />
+                                                    </Border>
+
+                                                    <Button Grid.Column="3"
+                                                            Text="✕"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveSetCommand}"
+                                                            CommandParameter="{Binding .}"
+                                                            BackgroundColor="#FFF1F2"
+                                                            TextColor="#E11D48"
+                                                            FontAttributes="Bold"
+                                                            FontSize="16"
+                                                            CornerRadius="10"
+                                                            HeightRequest="42"
+                                                            WidthRequest="42"
+                                                            Padding="0" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <!-- WIDOCZNE TYLKO, GDY KOLEKCJA JEST PUSTA -->
+                <VerticalStackLayout IsVisible="{Binding IsExercisesEmpty}"
+                                     Spacing="8"
+                                     Padding="20"
+                                     HorizontalOptions="Center">
+                    <Label Text="Brak ćwiczeń w tym treningu"
+                           FontSize="17"
+                           FontAttributes="Bold"
+                           TextColor="#334155"
+                           HorizontalTextAlignment="Center" />
+                    <Label Text="Wróć do listy szablonów i uruchom trening ponownie."
+                           FontSize="13"
+                           TextColor="#64748B"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeThickness="1"
+                Padding="15">
+            <Grid ColumnDefinitions="Auto,*"
+                  ColumnSpacing="12">
+                <Button Text="Anuluj"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="#E2E8F0"
+                        TextColor="#0F172A"
+                        CornerRadius="12"
+                        HeightRequest="50"
+                        Padding="18,0" />
+
+                <Button Grid.Column="1"
+                        Text="Zapisz trening"
+                        Command="{Binding SaveWorkoutCommand}"
+                        BackgroundColor="#0F766E"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="12"
+                        HeightRequest="50" />
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

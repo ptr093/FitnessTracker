@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Views.WorkoutTemplatesPage"
+             Title="Szablony treningów"
+             BackgroundColor="#F1F5F9">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0"
+                Margin="15,15,15,12"
+                Padding="20"
+                BackgroundColor="#0F766E"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 20">
+            <Border.Shadow>
+                <Shadow Brush="#0F766E"
+                        Offset="0,6"
+                        Radius="12"
+                        Opacity="0.18" />
+            </Border.Shadow>
+
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Twoje szablony"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="White" />
+
+                    <Label Text="Uruchamiaj gotowe treningi szybciej."
+                           FontSize="13"
+                           TextColor="#CCFBF1" />
+                </VerticalStackLayout>
+
+                <Button Grid.Column="1"
+                        Text="+ Nowy"
+                        Command="{Binding AddTemplateCommand}"
+                        BackgroundColor="White"
+                        TextColor="#0F766E"
+                        FontAttributes="Bold"
+                        CornerRadius="12"
+                        HeightRequest="42"
+                        Padding="14,0"
+                        VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <RefreshView Grid.Row="1"
+                     Command="{Binding LoadCommand}"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     RefreshColor="#0F766E">
+
+            <CollectionView ItemsSource="{Binding Templates}"
+                            SelectionMode="None"
+                            Margin="15,0,15,20">
+
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout IsVisible="{Binding ShowEmptyState}"
+                                         Padding="28"
+                                         Spacing="10"
+                                         VerticalOptions="Center"
+                                         HorizontalOptions="Center">
+
+                        <Label Text="📋"
+                               FontSize="44"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Text="Nie masz jeszcze szablonów"
+                               FontSize="19"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B"
+                               HorizontalTextAlignment="Center" />
+
+                        <Label Text="Utwórz np. „Trening klaty” i dodaj do niego swoje ćwiczenia."
+                               FontSize="13"
+                               TextColor="#64748B"
+                               HorizontalTextAlignment="Center" />
+
+                        <Button Text="+ Utwórz pierwszy szablon"
+                                Command="{Binding AddTemplateCommand}"
+                                BackgroundColor="#0F766E"
+                                TextColor="White"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="46"
+                                Margin="0,8,0,0" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,12"
+                                Padding="16"
+                                BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 18">
+
+                            <VerticalStackLayout Spacing="12">
+
+                                <Grid ColumnDefinitions="*,Auto"
+                                      ColumnSpacing="10">
+
+                                    <VerticalStackLayout Spacing="3">
+                                        <Label Text="{Binding Name}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="#0F172A"
+                                               LineBreakMode="TailTruncation" />
+
+                                        <Label Text="{Binding Subtitle}"
+                                               FontSize="13"
+                                               TextColor="#64748B" />
+
+                                        <Label Text="{Binding Description}"
+                                               IsVisible="{Binding Description, Converter={StaticResource StringNotEmptyConverter}}"
+                                               FontSize="13"
+                                               TextColor="#475569"
+                                               LineBreakMode="TailTruncation" />
+                                    </VerticalStackLayout>
+
+                                    <Label Grid.Column="1"
+                                           Text="📋"
+                                           FontSize="28"
+                                           VerticalOptions="Center" />
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto,Auto"
+                                      ColumnSpacing="9">
+
+                                    <Button Text="Rozpocznij"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                              Path=BindingContext.StartTemplateCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#0F766E"
+                                            TextColor="White"
+                                            FontAttributes="Bold"
+                                            CornerRadius="12"
+                                            HeightRequest="42" />
+
+                                    <Button Grid.Column="1"
+                                            Text="Edytuj"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                              Path=BindingContext.EditTemplateCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#EFF6FF"
+                                            TextColor="#2563EB"
+                                            FontAttributes="Bold"
+                                            CornerRadius="12"
+                                            HeightRequest="42"
+                                            Padding="14,0" />
+
+                                    <Button Grid.Column="2"
+                                            Text="Usuń"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                              Path=BindingContext.DeleteTemplateCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#FFF1F2"
+                                            TextColor="#E11D48"
+                                            FontAttributes="Bold"
+                                            CornerRadius="12"
+                                            HeightRequest="42"
+                                            Padding="14,0" />
+                                </Grid>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

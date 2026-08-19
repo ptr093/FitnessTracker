@@ -28,6 +28,8 @@ namespace FitnessTracker
             // Nasze serwisy
             builder.Services.AddSingleton<DatabaseService>();
             builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddSingleton<ExerciseCatalogService>();
+
 
             builder.Services.AddTransient<GymWorkoutViewModel>();
             builder.Services.AddTransient<HistoryViewModel>();
@@ -36,6 +38,9 @@ namespace FitnessTracker
             builder.Services.AddTransient<RunWorkoutViewModel>();
             builder.Services.AddTransient<StatsViewModel>();
             builder.Services.AddTransient<ManageExercisesViewModel>();
+            builder.Services.AddTransient<WorkoutTemplatesViewModel>();
+            builder.Services.AddTransient<EditWorkoutTemplateViewModel>();
+            builder.Services.AddTransient<TemplateWorkoutViewModel>();
 
 
             builder.Services.AddTransient<DashboardPage>();
@@ -47,6 +52,10 @@ namespace FitnessTracker
             builder.Services.AddTransient<EditRunWorkoutPopup>();
             builder.Services.AddTransient<StatsPage>();
             builder.Services.AddTransient<ManageExercisesPage>();
+
+            builder.Services.AddTransient<WorkoutTemplatesPage>();
+            builder.Services.AddTransient<EditWorkoutTemplatePage>();
+            builder.Services.AddTransient<TemplateWorkoutPage>();
 
             return builder.Build();
         }

@@ -80,6 +80,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\EditWorkoutTemplatePage.xaml.cs">
+	    <DependentUpon>EditWorkoutTemplatePage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\TemplateWorkoutPage.xaml.cs">
+	    <DependentUpon>TemplateWorkoutPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\WorkoutTemplatesPage.xaml.cs">
+	    <DependentUpon>WorkoutTemplatesPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\ManageExercisesPage.xaml.cs">
 	    <DependentUpon>ManageExercisesPage.xaml</DependentUpon>
 	  </Compile>
@@ -110,6 +119,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Views\EditWorkoutTemplatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\TemplateWorkoutPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\WorkoutTemplatesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\ManageExercisesPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
