@@ -115,7 +115,7 @@
                                                TextColor="#64748B" />
 
                                         <Label Text="{Binding Description}"
-                                               IsVisible="{Binding Description, Converter={StaticResource StringNotEmptyConverter}}"
+                                               IsVisible="{Binding HasDescription}"
                                                FontSize="13"
                                                TextColor="#475569"
                                                LineBreakMode="TailTruncation" />

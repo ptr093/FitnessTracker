@@ -26,6 +26,7 @@ public partial class WorkoutTemplatesViewModel : ObservableObject
         _databaseService = databaseService;
     }
 
+    
     [RelayCommand]
     private async Task LoadAsync()
     {
@@ -39,7 +40,6 @@ public partial class WorkoutTemplatesViewModel : ObservableObject
 
             var templates = await _databaseService.GetWorkoutTemplatesAsync();
 
-            // Bardzo ważne – nie dopisuj do starej kolekcji.
             Templates.Clear();
 
             foreach (var template in templates)
@@ -57,6 +57,23 @@ public partial class WorkoutTemplatesViewModel : ObservableObject
             }
 
             ShowEmptyState = Templates.Count == 0;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"BŁĄD ładowania szablonów: {ex}");
+
+            if (App.Current?.MainPage is not null)
+            {
+                await App.Current.MainPage.DisplayAlert(
+                    "Błąd szablonów",
+                    $"Nie udało się wczytać szablonów.\n\n{ex.Message}",
+                    "OK");
+            }
+
+            // Pozwala stronie pozostać otwartą zamiast crashować.
+            Templates.Clear();
+            ShowEmptyState = true;
         }
         finally
         {
