@@ -155,8 +155,8 @@ namespace FitnessTracker.ViewModels
                 {
                     Date = day.Key,
                     DayLabel = $"{day.Key:dd}\n{day.Key:MM}",
-                    BackgroundColor = Color.FromArgb("#F8FAFC"),
-                    TextColor = Color.FromArgb("#0F172A")
+                    BackgroundColor = FitnessTracker.Services.ThemeService.Get("SurfaceMuted"),
+                    TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary")
                 });
             }
         }
@@ -188,12 +188,12 @@ namespace FitnessTracker.ViewModels
                 var isSelected = day.Date.Date == selectedDate.Date;
 
                 day.BackgroundColor = isSelected
-                    ? Color.FromArgb("#0F172A")
-                    : Color.FromArgb("#F8FAFC");
+                    ? FitnessTracker.Services.ThemeService.Get("Hero")
+                    : FitnessTracker.Services.ThemeService.Get("SurfaceMuted");
 
                 day.TextColor = isSelected
-                    ? Colors.White
-                    : Color.FromArgb("#0F172A");
+                    ? FitnessTracker.Services.ThemeService.Get("OnHero")
+                    : FitnessTracker.Services.ThemeService.Get("TextPrimary");
             }
         }
 
@@ -212,8 +212,8 @@ namespace FitnessTracker.ViewModels
 
             if (workout.Type == "Siłownia")
             {
-                item.BadgeBackground = Color.FromArgb("#DBEAFE");
-                item.BadgeTextColor = Color.FromArgb("#1D4ED8");
+                item.BadgeBackground = FitnessTracker.Services.ThemeService.Get("BlueBadge");
+                item.BadgeTextColor = FitnessTracker.Services.ThemeService.Get("BlueBadgeText");
 
                 var lines = new ObservableCollection<string>();
 
@@ -242,8 +242,8 @@ namespace FitnessTracker.ViewModels
             }
             else if (workout.Type == "Bieganie")
             {
-                item.BadgeBackground = Color.FromArgb("#DCFCE7");
-                item.BadgeTextColor = Color.FromArgb("#15803D");
+                item.BadgeBackground = FitnessTracker.Services.ThemeService.Get("GreenBadge");
+                item.BadgeTextColor = FitnessTracker.Services.ThemeService.Get("GreenBadgeText");
 
                 var lines = new ObservableCollection<string>
                 {
@@ -293,20 +293,8 @@ namespace FitnessTracker.ViewModels
             }
         }
 
-        private List<double> DeserializeRunSplits(string? json)
-        {
-            if (string.IsNullOrWhiteSpace(json))
-                return new();
-
-            try
-            {
-                return JsonSerializer.Deserialize<List<double>>(json) ?? new();
-            }
-            catch
-            {
-                return new();
-            }
-        }
+        private static List<double> DeserializeRunSplits(string? json) =>
+            RunSplitsSerializer.Deserialize(json);
 
         private string FormatPace(double minutesPerKm)
         {

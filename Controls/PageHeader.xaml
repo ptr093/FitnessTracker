@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Wspólny nagłówek stron: przycisk wstecz + tytuł + opis (+ opcjonalna zawartość pod spodem).
+    Zastępuje pasek nawigacji Shell i osobne banery, więc tytuł nie jest już powtarzany dwa razy.
+-->
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Controls.PageHeader"
+             x:Name="Root">
+
+    <Border x:Name="HeaderBorder"
+            StrokeShape="RoundRectangle 18"
+            StrokeThickness="0"
+            Padding="16,14,18,18">
+        <Border.Shadow>
+            <Shadow Brush="{DynamicResource Shadow}"
+                    Offset="0,6"
+                    Radius="12"
+                    Opacity="0.18" />
+        </Border.Shadow>
+
+        <VerticalStackLayout Spacing="12">
+            <!-- Odstęp jest marginesem przycisku (nie ColumnSpacing), żeby bez przycisku tytuł nie był wcięty -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+
+                <!-- Wstecz -->
+                <Border x:Name="BackButton"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Margin="0,0,12,0"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="0"
+                        BackgroundColor="{DynamicResource HeroRaised}"
+                        VerticalOptions="Start"
+                        SemanticProperties.Description="Wróć">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xe5c4;"
+                           FontFamily="MaterialSymbols"
+                           FontSize="22"
+                           TextColor="{DynamicResource OnHero}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="2"
+                                     VerticalOptions="Center">
+                    <Label x:Name="TitleLabel"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource OnHero}"
+                           LineBreakMode="WordWrap" />
+                    <Label x:Name="SubtitleLabel"
+                           FontSize="13"
+                           TextColor="{DynamicResource OnHeroMuted}"
+                           LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+
+                <!-- Opcjonalna akcja po prawej (np. przełącznik motywu) -->
+                <ContentView x:Name="TrailingHost"
+                             Grid.Column="2"
+                             Margin="12,0,0,0"
+                             VerticalOptions="Start" />
+            </Grid>
+
+            <!-- Opcjonalna zawartość nagłówka (np. statystyki) -->
+            <ContentView x:Name="BodyHost"
+                         IsVisible="False" />
+        </VerticalStackLayout>
+    </Border>
+</ContentView>

@@ -15,7 +15,14 @@ namespace FitnessTracker.Models
         public string Type { get; set; } = string.Empty;
 
         // Id aktywności ze Stravy - do unikania duplikatów
+        // Integracja ze Stravą została usunięta; kolumna zostaje, bo mogą być w niej stare biegi.
         public long? StravaActivityId { get; set; }
+
+        // Identyfikator z innego źródła (np. "fit:<serial>:<czas>") - do unikania duplikatów przy imporcie
+        public string? ExternalId { get; set; }
+
+        // Średnie tętno (z Garmina / Stravy), jeśli dostępne
+        public double? AverageHeartRate { get; set; }
 
         // ==========================================
         // POLA DLA BIEGANIA

@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FitnessTracker.Controls"
+             x:Class="FitnessTracker.Views.DataSyncPage"
+             Title="Dane i synchronizacja">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15,20"
+                             Spacing="18"
+                             MaximumWidthRequest="620"
+                             HorizontalOptions="Fill">
+
+            <controls:PageHeader Title="Garmin i kopia zapasowa"
+                                 Subtitle="Import z zegarka oraz kopia Twoich treningów." />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="{DynamicResource Blue}" />
+
+            <!-- GARMIN CONNECT – OSOBISTY KLUCZ API -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="{DynamicResource Surface}"
+                    StrokeThickness="0"
+                    Padding="18">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource TextPrimary}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="&#xe334;" FontFamily="MaterialSymbols" />
+                                <Span Text="  Garmin Connect" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <!-- Brak klucza: instrukcja + pole -->
+                    <VerticalStackLayout Spacing="10"
+                                         IsVisible="{Binding HasNoGarminKey}">
+                        <Label FontSize="13"
+                               TextColor="{DynamicResource TextMuted}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Utwórz osobisty klucz na connect.garmin.com → Ustawienia → Personal API Key i wklej go poniżej. Klucz zostanie zapisany tylko na tym urządzeniu." />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                Stroke="{DynamicResource Border}"
+                                Padding="12,0">
+                            <Entry Text="{Binding GarminApiKeyInput, Mode=TwoWay}"
+                                   Placeholder="Wklej osobisty klucz API"
+                                   IsPassword="True"
+                                   IsSpellCheckEnabled="False"
+                                   IsTextPredictionEnabled="False"
+                                   TextColor="{DynamicResource TextPrimary}"
+                                   PlaceholderColor="{DynamicResource Placeholder}"
+                                   BackgroundColor="Transparent"
+                                   HeightRequest="46" />
+                        </Border>
+                        <Button Text="Zapisz i sprawdź klucz"
+                                Command="{Binding SaveGarminKeyCommand}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                BackgroundColor="{DynamicResource PrimaryButton}"
+                                TextColor="{DynamicResource OnPrimaryButton}"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="48" />
+                    </VerticalStackLayout>
+
+                    <!-- Klucz zapisany: synchronizacja -->
+                    <VerticalStackLayout Spacing="10"
+                                         IsVisible="{Binding HasGarminKey}">
+                        <Label
+                               FontSize="13"
+                               TextColor="{DynamicResource GreenText}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="&#xe86c;" FontFamily="MaterialSymbols" />
+                                    <Span Text="  Klucz zapisany. Pobierane są biegi (dystans, czas, okrążenia, tętno) i treningi siłowe nagrane na zegarku. Już pobrane aktywności są pomijane, więc większy zakres możesz pobrać raz, a potem synchronizować krótszy." />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <Label Text="ZAKRES"
+                               FontSize="11"
+                               FontAttributes="Bold"
+                               TextColor="{DynamicResource TextMuted}" />
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                Stroke="{DynamicResource Border}"
+                                Padding="12,0">
+                            <Picker ItemsSource="{Binding GarminRanges}"
+                                    ItemDisplayBinding="{Binding Label}"
+                                    SelectedItem="{Binding SelectedGarminRange, Mode=TwoWay}"
+                                    IsEnabled="{Binding IsNotBusy}"
+                                    TextColor="{DynamicResource TextPrimary}"
+                                    HeightRequest="46"
+                                    BackgroundColor="Transparent" />
+                        </Border>
+
+                        <Button Text="Pobierz treningi z Garmina"
+                                Command="{Binding ImportGarminCommand}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                BackgroundColor="{DynamicResource PrimaryButton}"
+                                TextColor="{DynamicResource OnPrimaryButton}"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="48" />
+
+                        <!-- Postęp i przerwanie podczas pobierania -->
+                        <VerticalStackLayout Spacing="8"
+                                             IsVisible="{Binding CanCancelGarmin}">
+                            <Label Text="{Binding StatusText}"
+                                   FontSize="13"
+                                   TextColor="{DynamicResource TextPrimary}"
+                                   HorizontalTextAlignment="Center" />
+                            <Button Text="Przerwij"
+                                    Command="{Binding CancelGarminCommand}"
+                                    BackgroundColor="{DynamicResource RedSoft}"
+                                    TextColor="{DynamicResource Red}"
+                                    FontAttributes="Bold"
+                                    CornerRadius="12"
+                                    HeightRequest="42" />
+                        </VerticalStackLayout>
+                        <Button Text="Usuń klucz z urządzenia"
+                                Command="{Binding RemoveGarminKeyCommand}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                BackgroundColor="Transparent"
+                                TextColor="{DynamicResource Red}"
+                                FontSize="13"
+                                HeightRequest="38" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- GARMIN .FIT -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="{DynamicResource Surface}"
+                    StrokeThickness="0"
+                    Padding="18">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource TextPrimary}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="&#xe2c7;" FontFamily="MaterialSymbols" />
+                                <Span Text="  Garmin – pliki .FIT (ręcznie)" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="W Garmin Connect otwórz aktywność → ⚙ → „Eksportuj oryginał” (ZIP z plikiem .fit) albo skopiuj pliki z zegarka (folder GARMIN/Activity). Importowane są biegi (dystans, czas, okrążenia, tętno) i treningi siłowe z serii zapisanych na zegarku."
+                           FontSize="13"
+                           TextColor="{DynamicResource TextMuted}" />
+                    <Button Text="Importuj pliki .FIT"
+                            Command="{Binding ImportFitCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            BackgroundColor="{DynamicResource PrimaryButton}"
+                            TextColor="{DynamicResource OnPrimaryButton}"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="48" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- KOPIA ZAPASOWA -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="{DynamicResource Surface}"
+                    StrokeThickness="0"
+                    Padding="18">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource TextPrimary}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="&#xe161;" FontFamily="MaterialSymbols" />
+                                <Span Text="  Kopia zapasowa" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="Dane są tylko na tym urządzeniu. Plik JSON zawiera treningi, szablony i własne ćwiczenia – zapisz go np. na Dysku Google. CSV otworzysz w Excelu."
+                           FontSize="13"
+                           TextColor="{DynamicResource TextMuted}" />
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="10">
+                        <Button Text="Eksport JSON"
+                                Command="{Binding ExportJsonCommand}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                BackgroundColor="{DynamicResource BlueSoft}"
+                                TextColor="{DynamicResource Blue}"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="46" />
+                        <Button Grid.Column="1"
+                                Text="Eksport CSV"
+                                Command="{Binding ExportCsvCommand}"
+                                IsEnabled="{Binding IsNotBusy}"
+                                BackgroundColor="{DynamicResource BlueSoft}"
+                                TextColor="{DynamicResource Blue}"
+                                FontAttributes="Bold"
+                                CornerRadius="12"
+                                HeightRequest="46" />
+                    </Grid>
+                    <Button Text="Przywróć z pliku JSON"
+                            Command="{Binding ImportJsonCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            BackgroundColor="{DynamicResource SurfaceMuted}"
+                            TextColor="{DynamicResource TextPrimary}"
+                            BorderColor="{DynamicResource BorderStrong}"
+                            BorderWidth="1"
+                            FontAttributes="Bold"
+                            CornerRadius="12"
+                            HeightRequest="46" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding StatusText}"
+                   FontSize="12"
+                   TextColor="{DynamicResource TextSecondary}"
+                   HorizontalTextAlignment="Center"
+                   Margin="0,0,0,20" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

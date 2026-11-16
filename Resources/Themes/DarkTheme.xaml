@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Ciemny motyw – te same nazwy co w LightTheme.xaml. -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="FitnessTracker.Resources.Themes.DarkTheme">
+
+    <!-- Powierzchnie -->
+    <Color x:Key="PageBackground">#020617</Color>
+    <Color x:Key="Surface">#0F172A</Color>
+    <Color x:Key="SurfaceMuted">#1E293B</Color>
+    <Color x:Key="SurfaceStrong">#334155</Color>
+    <Color x:Key="Border">#1E293B</Color>
+    <Color x:Key="BorderStrong">#334155</Color>
+    <Color x:Key="Shadow">#000000</Color>
+
+    <!-- Tekst -->
+    <Color x:Key="TextPrimary">#F1F5F9</Color>
+    <Color x:Key="TextSecondary">#CBD5E1</Color>
+    <Color x:Key="TextMuted">#94A3B8</Color>
+    <Color x:Key="Placeholder">#64748B</Color>
+
+    <!-- Nagłówki -->
+    <Color x:Key="Hero">#1E293B</Color>
+    <Color x:Key="HeroRaised">#334155</Color>
+    <Color x:Key="HeroRun">#064E3B</Color>
+    <Color x:Key="OnHero">#FFFFFF</Color>
+    <Color x:Key="OnHeroMuted">#CBD5E1</Color>
+    <Color x:Key="OnHeroSubtle">#94A3B8</Color>
+
+    <!-- Przyciski: główny odwraca się na jasny -->
+    <Color x:Key="PrimaryButton">#E2E8F0</Color>
+    <Color x:Key="OnPrimaryButton">#0F172A</Color>
+    <Color x:Key="OnAccent">#FFFFFF</Color>
+
+    <!-- Akcenty -->
+    <Color x:Key="Blue">#60A5FA</Color>
+    <Color x:Key="BlueSoft">#172554</Color>
+    <Color x:Key="BlueBorder">#1E3A8A</Color>
+
+    <Color x:Key="Green">#4ADE80</Color>
+    <Color x:Key="GreenBright">#22C55E</Color>
+    <Color x:Key="OnGreenBright">#052E16</Color>
+    <Color x:Key="GreenSoft">#052E16</Color>
+    <Color x:Key="GreenBorder">#166534</Color>
+    <Color x:Key="GreenText">#86EFAC</Color>
+
+    <Color x:Key="Teal">#2DD4BF</Color>
+    <Color x:Key="TealStrong">#0F766E</Color>
+    <Color x:Key="TealSoft">#042F2E</Color>
+    <Color x:Key="TealBorder">#115E59</Color>
+    <Color x:Key="TealText">#5EEAD4</Color>
+
+    <Color x:Key="Orange">#FB923C</Color>
+    <Color x:Key="OrangeOnHero">#FDBA74</Color>
+    <Color x:Key="OrangeSoft">#431407</Color>
+    <Color x:Key="OrangeBorder">#9A3412</Color>
+    <Color x:Key="OrangeText">#FDBA74</Color>
+
+    <Color x:Key="Red">#F87171</Color>
+    <Color x:Key="RedSoft">#450A0A</Color>
+    <Color x:Key="RedBorder">#991B1B</Color>
+
+    <Color x:Key="Indigo">#818CF8</Color>
+    <Color x:Key="IndigoStrong">#4F46E5</Color>
+    <Color x:Key="IndigoSoft">#1E1B4B</Color>
+    <Color x:Key="IndigoBorder">#3730A3</Color>
+    <Color x:Key="IndigoText">#C7D2FE</Color>
+
+    <Color x:Key="Gold">#FACC15</Color>
+
+    <!-- Odznaki (historia, rekordy) i wykres -->
+    <Color x:Key="BlueBadge">#1E3A8A</Color>
+    <Color x:Key="BlueBadgeText">#BFDBFE</Color>
+    <Color x:Key="GreenBadge">#14532D</Color>
+    <Color x:Key="GreenBadgeText">#86EFAC</Color>
+    <Color x:Key="IndigoBadge">#312E81</Color>
+    <Color x:Key="IndigoBadgeText">#C7D2FE</Color>
+    <Color x:Key="OrangeBadgeText">#FDBA74</Color>
+    <Color x:Key="AmberBadge">#451A03</Color>
+    <Color x:Key="AmberBadgeText">#FCD34D</Color>
+    <Color x:Key="PinkBadge">#500724</Color>
+    <Color x:Key="PinkBadgeText">#F9A8D4</Color>
+    <Color x:Key="Amber">#FBBF24</Color>
+    <Color x:Key="AmberText">#FCD34D</Color>
+</ResourceDictionary>

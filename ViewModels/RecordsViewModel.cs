@@ -213,9 +213,9 @@ public partial class RecordsViewModel : ObservableObject
 
         foreach (var item in Categories)
         {
-            item.BackgroundColor = Color.FromArgb("#FFFFFF");
-            item.BorderColor = Color.FromArgb("#E2E8F0");
-            item.TextColor = Color.FromArgb("#1E293B");
+            item.BackgroundColor = FitnessTracker.Services.ThemeService.Get("Surface");
+            item.BorderColor = FitnessTracker.Services.ThemeService.Get("Border");
+            item.TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary");
         }
 
         OnPropertyChanged(nameof(Categories));
@@ -233,9 +233,9 @@ public partial class RecordsViewModel : ObservableObject
             Title = "Bieganie",
             Subtitle = "Tempo, dystans i czas",
             Icon = "🏃",
-            BackgroundColor = Color.FromArgb("#FFFFFF"),
-            BorderColor = Color.FromArgb("#E2E8F0"),
-            TextColor = Color.FromArgb("#1E293B")
+            BackgroundColor = FitnessTracker.Services.ThemeService.Get("Surface"),
+            BorderColor = FitnessTracker.Services.ThemeService.Get("Border"),
+            TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary")
         });
 
         Categories.Add(new RecordsCategoryItem
@@ -244,9 +244,9 @@ public partial class RecordsViewModel : ObservableObject
             Title = "Siłowe",
             Subtitle = "Partie, ćwiczenia i wyniki",
             Icon = "🏋️",
-            BackgroundColor = Color.FromArgb("#FFFFFF"),
-            BorderColor = Color.FromArgb("#E2E8F0"),
-            TextColor = Color.FromArgb("#1E293B")
+            BackgroundColor = FitnessTracker.Services.ThemeService.Get("Surface"),
+            BorderColor = FitnessTracker.Services.ThemeService.Get("Border"),
+            TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary")
         });
     }
 
@@ -281,9 +281,9 @@ public partial class RecordsViewModel : ObservableObject
                 ExtraText = longestRun.Distance > 0 && longestRun.Duration > 0
                     ? $"Tempo: {FormatPace(longestRun.Duration / longestRun.Distance)} min/km"
                     : "-",
-                AccentBackground = Color.FromArgb("#DCFCE7"),
-                BadgeBackground = Color.FromArgb("#DCFCE7"),
-                BadgeTextColor = Color.FromArgb("#15803D")
+                AccentBackground = FitnessTracker.Services.ThemeService.Get("GreenBadge"),
+                BadgeBackground = FitnessTracker.Services.ThemeService.Get("GreenBadge"),
+                BadgeTextColor = FitnessTracker.Services.ThemeService.Get("GreenBadgeText")
             });
         }
 
@@ -305,9 +305,9 @@ public partial class RecordsViewModel : ObservableObject
                 DetailText = $"Dystans: {fastestRun.Distance:0.##} km",
                 DateText = $"{fastestRun.Date:dd.MM.yyyy}",
                 ExtraText = $"Czas: {fastestRun.Duration:0.##} min",
-                AccentBackground = Color.FromArgb("#DBEAFE"),
-                BadgeBackground = Color.FromArgb("#DBEAFE"),
-                BadgeTextColor = Color.FromArgb("#1D4ED8")
+                AccentBackground = FitnessTracker.Services.ThemeService.Get("BlueBadge"),
+                BadgeBackground = FitnessTracker.Services.ThemeService.Get("BlueBadge"),
+                BadgeTextColor = FitnessTracker.Services.ThemeService.Get("BlueBadgeText")
             });
         }
 
@@ -330,9 +330,9 @@ public partial class RecordsViewModel : ObservableObject
                 ExtraText = longestDurationRun.Distance > 0
                     ? $"Tempo: {FormatPace(longestDurationRun.Duration / longestDurationRun.Distance)} min/km"
                     : "-",
-                AccentBackground = Color.FromArgb("#E0E7FF"),
-                BadgeBackground = Color.FromArgb("#E0E7FF"),
-                BadgeTextColor = Color.FromArgb("#4338CA")
+                AccentBackground = FitnessTracker.Services.ThemeService.Get("IndigoBadge"),
+                BadgeBackground = FitnessTracker.Services.ThemeService.Get("IndigoBadge"),
+                BadgeTextColor = FitnessTracker.Services.ThemeService.Get("IndigoBadgeText")
             });
         }
     }
@@ -355,9 +355,9 @@ public partial class RecordsViewModel : ObservableObject
                 Key = category,
                 Title = category,
                 Subtitle = "Wybierz partię do analizy",
-                BackgroundColor = Color.FromArgb("#FFFFFF"),
-                BorderColor = Color.FromArgb("#E2E8F0"),
-                TextColor = Color.FromArgb("#1E293B")
+                BackgroundColor = FitnessTracker.Services.ThemeService.Get("Surface"),
+                BorderColor = FitnessTracker.Services.ThemeService.Get("Border"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary")
             });
         }
     }
@@ -382,9 +382,9 @@ public partial class RecordsViewModel : ObservableObject
                 Key = exercise,
                 Title = exercise,
                 Subtitle = "Pokaż rekordy dla ćwiczenia",
-                BackgroundColor = Color.FromArgb("#FFFFFF"),
-                BorderColor = Color.FromArgb("#E2E8F0"),
-                TextColor = Color.FromArgb("#1E293B")
+                BackgroundColor = FitnessTracker.Services.ThemeService.Get("Surface"),
+                BorderColor = FitnessTracker.Services.ThemeService.Get("Border"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary")
             });
         }
     }
@@ -439,9 +439,9 @@ public partial class RecordsViewModel : ObservableObject
                 ExtraText = !string.IsNullOrWhiteSpace(bestWeight.Workout.Category)
                     ? $"Partia: {bestWeight.Workout.Category}"
                     : "-",
-                AccentBackground = Color.FromArgb("#FFF7ED"),
-                BadgeBackground = Color.FromArgb("#FFF7ED"),
-                BadgeTextColor = Color.FromArgb("#C2410C")
+                AccentBackground = FitnessTracker.Services.ThemeService.Get("OrangeSoft"),
+                BadgeBackground = FitnessTracker.Services.ThemeService.Get("OrangeSoft"),
+                BadgeTextColor = FitnessTracker.Services.ThemeService.Get("OrangeBadgeText")
             });
         }
 
@@ -464,9 +464,9 @@ public partial class RecordsViewModel : ObservableObject
                 ExtraText = !string.IsNullOrWhiteSpace(bestVolumeSet.Workout.Category)
                     ? $"Partia: {bestVolumeSet.Workout.Category}"
                     : "-",
-                AccentBackground = Color.FromArgb("#FEF3C7"),
-                BadgeBackground = Color.FromArgb("#FEF3C7"),
-                BadgeTextColor = Color.FromArgb("#B45309")
+                AccentBackground = FitnessTracker.Services.ThemeService.Get("AmberBadge"),
+                BadgeBackground = FitnessTracker.Services.ThemeService.Get("AmberBadge"),
+                BadgeTextColor = FitnessTracker.Services.ThemeService.Get("AmberBadgeText")
             });
         }
 
@@ -499,9 +499,9 @@ public partial class RecordsViewModel : ObservableObject
                 ExtraText = !string.IsNullOrWhiteSpace(bestWorkoutVolume.Workout.Category)
                     ? $"Partia: {bestWorkoutVolume.Workout.Category}"
                     : "-",
-                AccentBackground = Color.FromArgb("#FCE7F3"),
-                BadgeBackground = Color.FromArgb("#FCE7F3"),
-                BadgeTextColor = Color.FromArgb("#BE185D")
+                AccentBackground = FitnessTracker.Services.ThemeService.Get("PinkBadge"),
+                BadgeBackground = FitnessTracker.Services.ThemeService.Get("PinkBadge"),
+                BadgeTextColor = FitnessTracker.Services.ThemeService.Get("PinkBadgeText")
             });
         }
     }

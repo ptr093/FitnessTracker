@@ -4,32 +4,33 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="FitnessTracker.Views.NewPersonalRecordPopup"
+    Color="Transparent"
     CanBeDismissedByTappingOutsideOfPopup="False">
 
-    <Border StrokeShape="RoundRectangle 26"
-            BackgroundColor="White"
+    <Border StrokeShape="RoundRectangle 18"
+            BackgroundColor="{DynamicResource Surface}"
             WidthRequest="360"
             Padding="0">
 
         <VerticalStackLayout Spacing="0">
-            <Grid BackgroundColor="#0F172A" Padding="18">
+            <Grid BackgroundColor="{DynamicResource Hero}" Padding="18">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Border BackgroundColor="#FACC15"
+                <Border BackgroundColor="{DynamicResource Gold}"
                         StrokeThickness="0"
                         StrokeShape="RoundRectangle 999"
                         Padding="10"
                         HeightRequest="44"
                         WidthRequest="44"
                         VerticalOptions="Center">
-                    <Label Text="🏆"
+                    <Label Text="&#xea23;"
                            FontSize="18"
                            HorizontalTextAlignment="Center"
                            VerticalTextAlignment="Center"
-                           TextColor="#0F172A" />
+                           TextColor="#0F172A" FontFamily="MaterialSymbols" />
                 </Border>
 
                 <VerticalStackLayout Grid.Column="1"
@@ -37,12 +38,12 @@
                                      Margin="12,0,0,0"
                                      VerticalOptions="Center">
                     <Label Text="Nowy rekord!"
-                           FontSize="20"
+                           FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="White" />
+                           TextColor="{DynamicResource OnHero}" />
                     <Label Text="Świetna robota"
                            FontSize="13"
-                           TextColor="#CBD5E1" />
+                           TextColor="{DynamicResource OnHeroMuted}" />
                 </VerticalStackLayout>
             </Grid>
 
@@ -50,55 +51,55 @@
                 <Label x:Name="ExerciseLabel"
                        FontSize="18"
                        FontAttributes="Bold"
-                       TextColor="#0F172A"
+                       TextColor="{DynamicResource TextPrimary}"
                        LineBreakMode="TailTruncation" />
 
                 <Border StrokeShape="RoundRectangle 18"
-                        BackgroundColor="#F8FAFC"
-                        Stroke="#E2E8F0"
+                        BackgroundColor="{DynamicResource SurfaceMuted}"
+                        Stroke="{DynamicResource Border}"
                         StrokeThickness="1"
                         Padding="14">
                     <VerticalStackLayout Spacing="10">
                         <Grid ColumnDefinitions="*,Auto">
                             <Label Text="Poprzedni rekord"
                                    FontSize="13"
-                                   TextColor="#64748B" />
+                                   TextColor="{DynamicResource TextMuted}" />
                             <Label x:Name="OldRecordLabel"
                                    Grid.Column="1"
                                    FontSize="13"
                                    FontAttributes="Bold"
-                                   TextColor="#475569" />
+                                   TextColor="{DynamicResource TextSecondary}" />
                         </Grid>
 
                         <Grid ColumnDefinitions="*,Auto">
                             <Label Text="Nowy rekord"
                                    FontSize="13"
-                                   TextColor="#64748B" />
+                                   TextColor="{DynamicResource TextMuted}" />
                             <Label x:Name="NewRecordLabel"
                                    Grid.Column="1"
                                    FontSize="18"
                                    FontAttributes="Bold"
-                                   TextColor="#16A34A" />
+                                   TextColor="{DynamicResource Green}" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
 
                 <Grid ColumnDefinitions="Auto,*"
                       ColumnSpacing="10">
-                    <Label Text="📅"
+                    <Label Text="&#xebcc;"
                            FontSize="14"
-                           VerticalOptions="Center" />
+                           VerticalOptions="Center" FontFamily="MaterialSymbols" TextColor="{DynamicResource TextSecondary}" />
                     <Label x:Name="DateLabel"
                            FontSize="13"
-                           TextColor="#64748B"
+                           TextColor="{DynamicResource TextMuted}"
                            VerticalOptions="Center" />
                 </Grid>
 
                 <Button Text="Super!"
                         Clicked="OnCloseClicked"
-                        BackgroundColor="#0F172A"
-                        TextColor="White"
-                        CornerRadius="14"
+                        BackgroundColor="{DynamicResource PrimaryButton}"
+                        TextColor="{DynamicResource OnPrimaryButton}"
+                        CornerRadius="12"
                         HeightRequest="50" />
             </VerticalStackLayout>
         </VerticalStackLayout>

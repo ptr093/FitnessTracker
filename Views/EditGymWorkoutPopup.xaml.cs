@@ -372,14 +372,14 @@ public partial class EditGymWorkoutPopup : Popup
                 VerticalOptions = LayoutOptions.Center,
                 FontAttributes = FontAttributes.Bold,
                 FontSize = 14,
-                TextColor = Color.FromArgb("#0F172A")
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary")
             };
 
             var deleteButton = new Button
             {
                 Text = "Usuń",
-                BackgroundColor = Color.FromArgb("#FEF2F2"),
-                TextColor = Color.FromArgb("#DC2626"),
+                BackgroundColor = FitnessTracker.Services.ThemeService.Get("RedSoft"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("Red"),
                 CornerRadius = 10,
                 HeightRequest = 36,
                 FontAttributes = FontAttributes.Bold,
@@ -423,7 +423,7 @@ public partial class EditGymWorkoutPopup : Popup
                 Keyboard = Keyboard.Numeric,
                 HorizontalTextAlignment = TextAlignment.Center,
                 BackgroundColor = Colors.Transparent,
-                TextColor = Color.FromArgb("#0F172A"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary"),
                 HeightRequest = 44
             };
 
@@ -433,7 +433,7 @@ public partial class EditGymWorkoutPopup : Popup
                 Keyboard = Keyboard.Numeric,
                 HorizontalTextAlignment = TextAlignment.Center,
                 BackgroundColor = Colors.Transparent,
-                TextColor = Color.FromArgb("#0F172A"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary"),
                 HeightRequest = 44
             };
 
@@ -489,8 +489,8 @@ public partial class EditGymWorkoutPopup : Popup
             var card = new Border
             {
                 StrokeShape = new RoundRectangle { CornerRadius = 14 },
-                BackgroundColor = Color.FromArgb("#F8FAFC"),
-                Stroke = Color.FromArgb("#E2E8F0"),
+                BackgroundColor = FitnessTracker.Services.ThemeService.Get("SurfaceMuted"),
+                Stroke = FitnessTracker.Services.ThemeService.Get("Border"),
                 StrokeThickness = 1,
                 Padding = 14,
                 Content = new VerticalStackLayout
@@ -519,13 +519,13 @@ public partial class EditGymWorkoutPopup : Popup
                 {
                     Text = labelText,
                     FontSize = 12,
-                    TextColor = Color.FromArgb("#64748B")
+                    TextColor = FitnessTracker.Services.ThemeService.Get("TextMuted")
                 },
                 new Border
                 {
                     StrokeShape = new RoundRectangle { CornerRadius = 12 },
-                    BackgroundColor = Colors.White,
-                    Stroke = Color.FromArgb("#E2E8F0"),
+                    BackgroundColor = FitnessTracker.Services.ThemeService.Get("Surface"),
+                    Stroke = FitnessTracker.Services.ThemeService.Get("Border"),
                     StrokeThickness = 1,
                     Padding = new Thickness(10, 0),
                     Content = entry

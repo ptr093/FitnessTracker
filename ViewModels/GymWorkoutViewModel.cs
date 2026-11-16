@@ -5,160 +5,161 @@ using FitnessTracker.Models;
 using FitnessTracker.Services;
 using FitnessTracker.Views;
 using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Storage; // Dodane do obsługi zapisu w pamięci urządzenia
-using System;
-using System.Collections.Generic;
+using Microsoft.Maui.Devices;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace FitnessTracker.ViewModels
 {
     public partial class GymWorkoutViewModel : ObservableObject
     {
         private readonly DatabaseService _databaseService;
+        private readonly ExerciseCatalogService _catalogService;
 
-        // Główna lista ćwiczeń (połączona: Domyślne + Własne użytkownika)
+        // Wspólny katalog ćwiczeń (domyślne + własne) z ExerciseCatalogService
         private Dictionary<string, List<string>> _exercisesDatabase = new();
 
-        // Lista tylko własnych ćwiczeń użytkownika (do zapisywania w pamięci)
-        private Dictionary<string, List<string>> _customUserExercises = new();
+        private string AddCustomItem => _catalogService.GetAddCustomExerciseItem();
 
-        public ObservableCollection<string> Categories { get; } = new()
-        {
-            "Klatka piersiowa", "Plecy", "Nogi", "Barki", "Ramiona", "Brzuch"
-        };
-
+        public ObservableCollection<string> Categories { get; } = new();
         public ObservableCollection<string> AvailableExercises { get; } = new();
         public ObservableCollection<WorkoutSet> Sets { get; } = new();
-        
+
+        // Ćwiczenia zapisane w bieżącej sesji (przycisk "Zapisz i dodaj kolejne")
+        public ObservableCollection<string> SessionExercises { get; } = new();
+        public bool HasSessionExercises => SessionExercises.Count > 0;
+
+        public ObservableCollection<int> RestPresets { get; } = new() { 60, 90, 120, 180 };
+
         [ObservableProperty]
         private string? location;
 
         [ObservableProperty]
-        private string selectedCategory;
+        [NotifyPropertyChangedFor(nameof(HasSelectedCategory))]
+        private string? selectedCategory;
 
-        private string _selectedExercise;
-        public string SelectedExercise
+        public bool HasSelectedCategory => !string.IsNullOrEmpty(SelectedCategory);
+
+        private string? _selectedExercise;
+        public string? SelectedExercise
         {
             get => _selectedExercise;
             set
             {
-                if (value == "➕ Dodaj własne ćwiczenie...")
+                if (value != null && ExerciseCatalogService.IsAddCustomExerciseItem(value))
                 {
                     PromptForCustomExerciseAsync();
+                    return;
                 }
-                else
-                {
-                    SetProperty(ref _selectedExercise, value);
-                }
+
+                if (SetProperty(ref _selectedExercise, value))
+                    _ = RefreshProgressionAsync();
             }
         }
 
-        public GymWorkoutViewModel(DatabaseService databaseService)
+        // ---------- Ostatni trening ----------
+        [ObservableProperty]
+        private string? lastWorkoutInfo;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsNotLoadingLastWorkout))]
+        private bool isLoadingLastWorkout;
+
+        public bool IsNotLoadingLastWorkout => !IsLoadingLastWorkout;
+
+        // ---------- Progresja ----------
+        private ProgressionSuggestion? _suggestion;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasProgressionInfo))]
+        private string? progressionInfo;
+
+        [ObservableProperty]
+        private string? progressionDetails;
+
+        public bool HasProgressionInfo => !string.IsNullOrEmpty(ProgressionInfo);
+
+        [ObservableProperty]
+        private bool canApplySuggestion;
+
+        [ObservableProperty]
+        private string currentOneRepMaxText = "—";
+
+        [ObservableProperty]
+        private string currentVolumeText = "0 kg";
+
+        // ---------- Minutnik przerwy ----------
+        private IDispatcherTimer? _restTimer;
+        private DateTime _restEndsAt;
+
+        [ObservableProperty]
+        private int selectedRestSeconds = 90;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RestButtonText))]
+        private bool isRestRunning;
+
+        [ObservableProperty]
+        private string restRemainingText = "1:30";
+
+        [ObservableProperty]
+        private double restProgress;
+
+        public string RestButtonText => IsRestRunning ? "Stop" : "Start przerwy";
+
+        public GymWorkoutViewModel(DatabaseService databaseService, ExerciseCatalogService catalogService)
         {
             _databaseService = databaseService;
+            _catalogService = catalogService;
 
-            // Ładujemy ćwiczenia przy wejściu do ViewModelu
             LoadExercises();
+            Location = Preferences.Default.Get("LastGymLocation", string.Empty);
+
+            Sets.CollectionChanged += (_, e) =>
+            {
+                if (e.NewItems != null)
+                    foreach (WorkoutSet s in e.NewItems) s.PropertyChanged += (_, _) => UpdateLiveStats();
+                UpdateLiveStats();
+            };
+            SessionExercises.CollectionChanged += (_, _) => OnPropertyChanged(nameof(HasSessionExercises));
 
             Sets.Add(new WorkoutSet { SetNumber = 1, Weight = 0, Reps = 0 });
         }
 
-        // Metoda ładująca i łącząca bazę ćwiczeń
         private void LoadExercises()
         {
-            // 1. Definiujemy bazę domyślną (sztywną)
-            _exercisesDatabase = new Dictionary<string, List<string>>
-            {
-                { "Klatka piersiowa", new List<string> { "🏋️ Wyciskanie sztangi leżąc", "🏋️ Wyciskanie sztangi skos górny", "🔩 Wyciskanie hantli leżąc", "🔩 Wyciskanie hantli skos", "🤖 Hammer (Wyciskanie maszyna)", "🦋 Rozpiętki hantlami", "🦾 Pompki na poręczach (Dips)" } },
-                { "Plecy", new List<string> { "🦅 Ściąganie drążka (Lat Pulldown)", "🦅 Ściąganie chwytu wyciągu górnego po skosie", "🚣 Wiosłowanie sztangą", "🚣 Przyciąganie linki wyciągu dolnego siedząc", "🧗 Podciąganie na drążku", "🔥 Martwy ciąg" } },
-                { "Nogi", new List<string> { "🦵 Przysiad ze sztangą (Squat)", "🏗️ Wyciskanie na suwnicy", "🍑 Hip Thrust (Unoszenie bioder)", "🚶 Wykroki", "🦵 Uginanie nóg na maszynie", "🦵 Wznosy na łydki" } },
-                { "Barki", new List<string>
-                {
-                 "🛡️ Wyciskanie żołnierskie (OHP)",
-                 "🔩 Wyciskanie hantli siedząc",
-                 "🦅 Wznosy bokiem",
-                 "🦅 Wznosy w opadzie",
-                 "🦋 Odwodzenie ramion na maszynie Butterfly odwrotnie (Rear Delt Fly)",
-                 "🎯 Face pulls",
-                 "⬆️ Unoszenie hantli w przód"
-                    }
-                },
-                { "Ramiona", new List<string> { "💪 Uginanie ze sztangą (Biceps)", "🔨 Uginanie młotkowe", "💪 Wyciskanie francuskie", "🪢 Prostowanie z linką wyciągu" } },
-                { "Brzuch", new List<string> { "🍫 Allahy (Crunches z linką)", "🚲 Rowerek", "🛹 Deska (Plank)", "🧗 Unoszenie nóg w zwisie" } }
-            };
+            _exercisesDatabase = _catalogService.GetAllExercises();
 
-            // 2. Odczytujemy zapisane własne ćwiczenia z urządzenia (Preferences)
-            string savedCustomJson = Preferences.Default.Get("CustomUserExercisesDB", string.Empty);
-
-            if (!string.IsNullOrEmpty(savedCustomJson))
-            {
-                try
-                {
-                    _customUserExercises = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(savedCustomJson) ?? new();
-
-                    // 3. Łączymy: dodajemy własne ćwiczenia do głównego słownika
-                    foreach (var category in _customUserExercises)
-                    {
-                        if (_exercisesDatabase.ContainsKey(category.Key))
-                        {
-                            foreach (var customEx in category.Value)
-                            {
-                                if (!_exercisesDatabase[category.Key].Contains(customEx))
-                                    _exercisesDatabase[category.Key].Add(customEx);
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    // W razie błędu parsowania, ignorujemy
-                    _customUserExercises = new Dictionary<string, List<string>>();
-                }
-            }
+            Categories.Clear();
+            foreach (var category in _exercisesDatabase.Keys)
+                Categories.Add(category);
         }
 
-        // Zapisuje nowe ćwiczenie trwale na urządzeniu
-        private void SaveCustomExercise(string category, string newExercise)
-        {
-            // Dodajemy do słownika głównego (żeby działało od razu)
-            if (_exercisesDatabase.ContainsKey(category) && !_exercisesDatabase[category].Contains(newExercise))
-            {
-                _exercisesDatabase[category].Add(newExercise);
-            }
-
-            // Dodajemy do słownika z samymi "własnymi" i zapisujemy do pamięci
-            if (!_customUserExercises.ContainsKey(category))
-                _customUserExercises[category] = new List<string>();
-
-            if (!_customUserExercises[category].Contains(newExercise))
-            {
-                _customUserExercises[category].Add(newExercise);
-
-                // Zapis na stałe!
-                string json = JsonSerializer.Serialize(_customUserExercises);
-                Preferences.Default.Set("CustomUserExercisesDB", json);
-            }
-        }
-
-        partial void OnSelectedCategoryChanged(string value)
+        private void FillExercises(string? category)
         {
             AvailableExercises.Clear();
-            SelectedExercise = null;
 
-            if (value == null || !_exercisesDatabase.ContainsKey(value))
+            if (category == null || !_exercisesDatabase.TryGetValue(category, out var exercises))
                 return;
 
-            var exercises = _exercisesDatabase[value];
-
             foreach (var ex in exercises)
-            {
                 AvailableExercises.Add(ex);
-            }
 
-            AvailableExercises.Add("➕ Dodaj własne ćwiczenie...");
+            AvailableExercises.Add(AddCustomItem);
+        }
+
+        partial void OnSelectedCategoryChanging(string? value)
+        {
+            LastWorkoutInfo = null;
+        }
+
+        partial void OnSelectedCategoryChanged(string? value)
+        {
+            FillExercises(value);
+            SelectedExercise = null;
+
+            if (AvailableExercises.Count == 0)
+                return;
 
             MainThread.BeginInvokeOnMainThread(() =>
             {
@@ -168,54 +169,194 @@ namespace FitnessTracker.ViewModels
 
         private async void PromptForCustomExerciseAsync()
         {
-            if (App.Current?.MainPage == null) return;
+            var page = Shell.Current?.CurrentPage;
+            if (page == null) return;
 
-            string result = await App.Current.MainPage.DisplayPromptAsync(
+            string result = await page.DisplayPromptAsync(
                 "Nowe ćwiczenie",
                 "Podaj nazwę własnego ćwiczenia:",
                 "Dodaj", "Anuluj",
                 "np. Przyciąganie jednorącz");
 
-            if (!string.IsNullOrWhiteSpace(result))
-            {
-                string newExercise = $"⭐ {result.Trim()}";
-                string currentCategory = SelectedCategory;
+            var currentCategory = SelectedCategory;
+            string? newExercise = null;
 
-                if (!string.IsNullOrEmpty(currentCategory))
+            if (!string.IsNullOrWhiteSpace(result) && !string.IsNullOrEmpty(currentCategory))
+            {
+                _catalogService.AddCustomExercise(currentCategory, result);
+                newExercise = $"⭐ {result.Trim().TrimStart('⭐').Trim()}";
+                _exercisesDatabase = _catalogService.GetAllExercises();
+            }
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                FillExercises(currentCategory);
+                SelectedExercise = newExercise != null && AvailableExercises.Contains(newExercise)
+                    ? newExercise
+                    : AvailableExercises.FirstOrDefault(x => !ExerciseCatalogService.IsAddCustomExerciseItem(x));
+            });
+        }
+
+        // =====================================================
+        // OSTATNI TRENING
+        // =====================================================
+
+        [RelayCommand]
+        private async Task LoadLastWorkoutAsync()
+        {
+            if (IsLoadingLastWorkout)
+                return;
+
+            if (string.IsNullOrEmpty(SelectedCategory))
+            {
+                LastWorkoutInfo = "Najpierw wybierz partię mięśniową.";
+                return;
+            }
+
+            IsLoadingLastWorkout = true;
+
+            try
+            {
+                var last = await _databaseService.GetLastGymWorkoutAsync(SelectedCategory, SelectedExercise);
+
+                if (last == null)
                 {
-                    // TRWAŁY ZAPIS
-                    SaveCustomExercise(currentCategory, newExercise);
+                    LastWorkoutInfo = $"Brak zapisanych treningów dla partii „{SelectedCategory}”.";
+                    return;
                 }
 
-                MainThread.BeginInvokeOnMainThread(() =>
+                var sets = DatabaseService.GetOrderedSets(last);
+                if (sets.Count == 0)
                 {
-                    AvailableExercises.Clear();
+                    LastWorkoutInfo = "Ostatni trening nie zawiera serii.";
+                    return;
+                }
 
-                    if (!string.IsNullOrEmpty(currentCategory) && _exercisesDatabase.ContainsKey(currentCategory))
-                    {
-                        foreach (var item in _exercisesDatabase[currentCategory])
-                        {
-                            AvailableExercises.Add(item);
-                        }
-                    }
-                    AvailableExercises.Add("➕ Dodaj własne ćwiczenie...");
+                // Jeśli nie było historii dla wybranego ćwiczenia – przełączamy na ćwiczenie z ostatniego treningu partii
+                if (last.Exercise != SelectedExercise)
+                {
+                    if (!AvailableExercises.Contains(last.Exercise))
+                        AvailableExercises.Insert(Math.Max(0, AvailableExercises.Count - 1), last.Exercise);
 
-                    SelectedExercise = newExercise;
-                });
+                    SelectedExercise = last.Exercise;
+                }
+
+                ReplaceSets(sets);
+
+                if (string.IsNullOrWhiteSpace(Location) && !string.IsNullOrWhiteSpace(last.Location))
+                    Location = last.Location;
+
+                var maxWeight = sets.Max(s => s.Weight);
+                LastWorkoutInfo =
+                    $"Wczytano: {last.Exercise} · {last.Date:dd.MM.yyyy} · {sets.Count} serii · max {maxWeight:0.##} kg";
             }
-            else
+            catch (Exception ex)
             {
-                MainThread.BeginInvokeOnMainThread(() =>
+                LastWorkoutInfo = $"Nie udało się wczytać ostatniego treningu: {ex.Message}";
+            }
+            finally
+            {
+                IsLoadingLastWorkout = false;
+            }
+        }
+
+        // =====================================================
+        // PROGRESJA
+        // =====================================================
+
+        private List<WorkoutSet> _lastSetsForExercise = new();
+
+        private async Task RefreshProgressionAsync()
+        {
+            var exercise = SelectedExercise;
+            _suggestion = null;
+            CanApplySuggestion = false;
+            ProgressionInfo = null;
+            ProgressionDetails = null;
+
+            if (string.IsNullOrWhiteSpace(exercise))
+                return;
+
+            try
+            {
+                var last = await _databaseService.GetLastGymWorkoutAsync(null, exercise);
+
+                // Użytkownik mógł w międzyczasie zmienić ćwiczenie
+                if (exercise != SelectedExercise)
+                    return;
+
+                if (last == null)
                 {
-                    SelectedExercise = AvailableExercises.FirstOrDefault();
-                });
+                    ProgressionInfo = "Pierwszy raz to ćwiczenie — zapisz wynik, a następnym razem podpowiem progresję.";
+                    return;
+                }
+
+                _lastSetsForExercise = DatabaseService.GetOrderedSets(last);
+                _suggestion = ProgressionCalculator.Suggest(_lastSetsForExercise);
+
+                var setsText = string.Join(", ", _lastSetsForExercise.Select(s => $"{s.Weight:0.##}×{s.Reps}"));
+                var e1rm = ProgressionCalculator.BestOneRepMax(_lastSetsForExercise);
+
+                ProgressionDetails = $"Ostatnio ({last.Date:dd.MM}): {setsText} · 1RM ≈ {e1rm:0.#} kg";
+                ProgressionInfo = _suggestion?.Message;
+                CanApplySuggestion = _suggestion != null;
+            }
+            catch
+            {
+                // Brak podpowiedzi nie blokuje treningu
             }
         }
 
         [RelayCommand]
+        private void ApplySuggestion()
+        {
+            if (_suggestion == null)
+                return;
+
+            var count = Math.Max(1, _lastSetsForExercise.Count(s => s.Weight > 0 && s.Reps > 0));
+            var sets = Enumerable.Range(1, count)
+                .Select(i => new WorkoutSet { SetNumber = i, Weight = _suggestion.Weight, Reps = _suggestion.Reps })
+                .ToList();
+
+            ReplaceSets(sets);
+        }
+
+        private void ReplaceSets(IEnumerable<WorkoutSet> sets)
+        {
+            Sets.Clear();
+            foreach (var set in sets)
+                Sets.Add(set);
+
+            if (Sets.Count == 0)
+                Sets.Add(new WorkoutSet { SetNumber = 1 });
+        }
+
+        private void UpdateLiveStats()
+        {
+            var valid = Sets.Where(s => s.Weight > 0 && s.Reps > 0).ToList();
+            var e1rm = ProgressionCalculator.BestOneRepMax(valid);
+            CurrentOneRepMaxText = e1rm > 0 ? $"{e1rm:0.#} kg" : "—";
+            CurrentVolumeText = $"{ProgressionCalculator.Volume(valid):0.#} kg";
+        }
+
+        // =====================================================
+        // SERIE
+        // =====================================================
+
+        [RelayCommand]
         private void AddSet()
         {
-            Sets.Add(new WorkoutSet { SetNumber = Sets.Count + 1, Weight = 0, Reps = 0 });
+            // Nowa seria kopiuje ostatnią – zwykle robi się kilka serii tym samym ciężarem
+            var last = Sets.LastOrDefault();
+            Sets.Add(new WorkoutSet
+            {
+                SetNumber = Sets.Count + 1,
+                Weight = last?.Weight ?? 0,
+                Reps = last?.Reps ?? 0
+            });
+
+            if (Preferences.Default.Get("AutoStartRest", true) && last is { Weight: > 0, Reps: > 0 })
+                StartRest();
         }
 
         [RelayCommand]
@@ -226,46 +367,138 @@ namespace FitnessTracker.ViewModels
             Sets.Remove(set);
 
             for (int i = 0; i < Sets.Count; i++)
-            {
                 Sets[i].SetNumber = i + 1;
-            }
 
             if (Sets.Count == 0)
-            {
                 Sets.Add(new WorkoutSet { SetNumber = 1, Weight = 0, Reps = 0 });
-            }
+        }
+
+        // =====================================================
+        // MINUTNIK PRZERWY
+        // =====================================================
+
+        partial void OnSelectedRestSecondsChanged(int value)
+        {
+            if (!IsRestRunning)
+                RestRemainingText = FormatSeconds(value);
         }
 
         [RelayCommand]
-       
-        private async Task SaveWorkoutAsync()
+        private void SelectRest(int seconds)
         {
-            if (string.IsNullOrWhiteSpace(SelectedExercise) || SelectedExercise == "➕ Dodaj własne ćwiczenie...")
+            SelectedRestSeconds = seconds;
+            if (IsRestRunning)
+                StartRest();
+        }
+
+        [RelayCommand]
+        private void ToggleRest()
+        {
+            if (IsRestRunning)
+                StopRest();
+            else
+                StartRest();
+        }
+
+        private void StartRest()
+        {
+            _restEndsAt = DateTime.Now.AddSeconds(SelectedRestSeconds);
+
+            if (_restTimer == null)
             {
-                if (App.Current?.MainPage != null)
-                    await App.Current.MainPage.DisplayAlert("Błąd", "Wybierz najpierw poprawne ćwiczenie!", "OK");
+                var dispatcher = Application.Current?.Dispatcher;
+                if (dispatcher == null) return;
+
+                _restTimer = dispatcher.CreateTimer();
+                _restTimer.Interval = TimeSpan.FromMilliseconds(250);
+                _restTimer.Tick += (_, _) => OnRestTick();
+            }
+
+            IsRestRunning = true;
+            OnRestTick();
+            _restTimer.Start();
+        }
+
+        private void StopRest()
+        {
+            _restTimer?.Stop();
+            IsRestRunning = false;
+            RestProgress = 0;
+            RestRemainingText = FormatSeconds(SelectedRestSeconds);
+        }
+
+        private void OnRestTick()
+        {
+            var remaining = _restEndsAt - DateTime.Now;
+
+            if (remaining <= TimeSpan.Zero)
+            {
+                StopRest();
+                RestRemainingText = "Czas na serię!";
+                NotifyRestFinished();
+                return;
+            }
+
+            RestRemainingText = FormatSeconds((int)Math.Ceiling(remaining.TotalSeconds));
+            RestProgress = 1 - remaining.TotalSeconds / Math.Max(1, SelectedRestSeconds);
+        }
+
+        private static void NotifyRestFinished()
+        {
+            try
+            {
+                if (Vibration.Default.IsSupported)
+                    Vibration.Default.Vibrate(TimeSpan.FromMilliseconds(600));
+                else
+                    HapticFeedback.Default.Perform(HapticFeedbackType.LongPress);
+            }
+            catch
+            {
+                // Brak wibracji na danej platformie – ignorujemy
+            }
+        }
+
+        private static string FormatSeconds(int seconds) => $"{seconds / 60}:{seconds % 60:00}";
+
+        public void OnPageDisappearing() => StopRest();
+
+        // =====================================================
+        // ZAPIS
+        // =====================================================
+
+        [RelayCommand]
+        private Task SaveWorkoutAsync() => SaveCoreAsync(continueSession: false);
+
+        [RelayCommand]
+        private Task SaveAndContinueAsync() => SaveCoreAsync(continueSession: true);
+
+        private async Task SaveCoreAsync(bool continueSession)
+        {
+            var page = Shell.Current?.CurrentPage;
+
+            if (string.IsNullOrWhiteSpace(SelectedExercise) || ExerciseCatalogService.IsAddCustomExerciseItem(SelectedExercise))
+            {
+                if (page != null)
+                    await page.DisplayAlert("Błąd", "Wybierz najpierw poprawne ćwiczenie!", "OK");
                 return;
             }
 
             var validSets = Sets.Where(x => x.Weight > 0 && x.Reps > 0).ToList();
             if (!validSets.Any())
             {
-                if (App.Current?.MainPage != null)
-                    await App.Current.MainPage.DisplayAlert("Błąd", "Dodaj co najmniej jedną poprawną serię!", "OK");
+                if (page != null)
+                    await page.DisplayAlert("Błąd", "Dodaj co najmniej jedną poprawną serię!", "OK");
                 return;
             }
 
             var workout = new Workout
             {
                 Type = "Siłownia",
-                Category = SelectedCategory,
+                Category = SelectedCategory ?? string.Empty,
                 Exercise = SelectedExercise,
                 GymSetsJson = JsonSerializer.Serialize(validSets),
                 Date = DateTime.Now,
-                Location = string.IsNullOrWhiteSpace(Location)
-        ? null
-        : Location.Trim()
-
+                Location = string.IsNullOrWhiteSpace(Location) ? null : Location.Trim()
             };
 
             var record = await _databaseService.GetExerciseRecordAsync(SelectedExercise);
@@ -273,23 +506,35 @@ namespace FitnessTracker.ViewModels
             var isNewRecord = !record.MaxWeight.HasValue || currentMax > record.MaxWeight.Value;
 
             await _databaseService.SaveWorkoutAsync(workout);
+            Preferences.Default.Set("LastGymLocation", workout.Location ?? string.Empty);
 
-            if (isNewRecord && App.Current?.MainPage is not null)
+            if (isNewRecord && page != null)
             {
-                var popup = new NewPersonalRecordPopup(
-                    SelectedExercise,
-                    record.MaxWeight,
-                    currentMax,
-                    workout.Date);
-
-                if (App.Current.MainPage is Page page)
-                    await page.ShowPopupAsync(popup);
+                var popup = new NewPersonalRecordPopup(SelectedExercise, record.MaxWeight, currentMax, workout.Date);
+                await page.ShowPopupAsync(popup);
             }
 
-            if (App.Current?.MainPage != null)
-                await App.Current.MainPage.DisplayAlert("Sukces", "Trening został zapisany!", "OK");
+            if (continueSession)
+            {
+                SessionExercises.Add($"{workout.Exercise} · {validSets.Count} serii · max {currentMax:0.##} kg");
+                StopRest();
+                ReplaceSets(new[] { new WorkoutSet { SetNumber = 1 } });
+                LastWorkoutInfo = null;
+                await RefreshProgressionAsync();
+                return;
+            }
 
-            await Shell.Current.GoToAsync("..");
+            StopRest();
+
+            if (page != null)
+            {
+                var message = SessionExercises.Count > 0
+                    ? $"Zapisano sesję: {SessionExercises.Count + 1} ćwiczeń."
+                    : "Trening został zapisany!";
+                await page.DisplayAlert("Sukces", message, "OK");
+            }
+
+            await Shell.Current!.GoToAsync("..");
         }
     }
 }

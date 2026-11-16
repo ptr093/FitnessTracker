@@ -4,10 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="FitnessTracker.Views.EditRunWorkoutPopup"
+    Color="Transparent"
     CanBeDismissedByTappingOutsideOfPopup="False">
 
     <Border StrokeShape="RoundRectangle 18"
-            BackgroundColor="White"
+            BackgroundColor="{DynamicResource Surface}"
             Padding="0"
             WidthRequest="360">
 
@@ -15,19 +16,19 @@
               RowSpacing="0">
 
             <Border Grid.Row="0"
-                    BackgroundColor="#0F172A"
+                    BackgroundColor="{DynamicResource Hero}"
                     StrokeThickness="0"
                     StrokeShape="RoundRectangle 18,18,0,0"
                     Padding="20,18">
                 <VerticalStackLayout Spacing="4">
                     <Label Text="Edytuj bieg"
-                           FontSize="20"
+                           FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="White" />
+                           TextColor="{DynamicResource OnHero}" />
 
                     <Label Text="Popraw datę, dystans, czas i międzyczasy."
                            FontSize="12"
-                           TextColor="#CBD5E1" />
+                           TextColor="{DynamicResource OnHeroMuted}" />
                 </VerticalStackLayout>
             </Border>
 
@@ -40,15 +41,15 @@
                         <Label Text="Data treningu"
                                FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#64748B" />
+                               TextColor="{DynamicResource TextMuted}" />
                         <Border StrokeShape="RoundRectangle 12"
-                                BackgroundColor="#F8FAFC"
-                                Stroke="#E2E8F0"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                Stroke="{DynamicResource Border}"
                                 StrokeThickness="1"
                                 Padding="12,6">
                             <DatePicker x:Name="WorkoutDatePicker"
                                         Format="dd MMM yyyy"
-                                        TextColor="#0F172A"
+                                        TextColor="{DynamicResource TextPrimary}"
                                         BackgroundColor="Transparent"
                                         MaximumDate="2100-12-31"
                                         MinimumDate="2000-01-01" />
@@ -59,15 +60,15 @@
                         <Label Text="Dystans (km)"
                                FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#64748B" />
+                               TextColor="{DynamicResource TextMuted}" />
                         <Border StrokeShape="RoundRectangle 12"
-                                BackgroundColor="#F8FAFC"
-                                Stroke="#E2E8F0"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                Stroke="{DynamicResource Border}"
                                 StrokeThickness="1"
                                 Padding="10,0">
                             <Entry x:Name="DistanceEntry"
                                    Keyboard="Numeric"
-                                   TextColor="#0F172A"
+                                   TextColor="{DynamicResource TextPrimary}"
                                    BackgroundColor="Transparent"
                                    HeightRequest="46" />
                         </Border>
@@ -77,15 +78,15 @@
                         <Label Text="Czas (min)"
                                FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#64748B" />
+                               TextColor="{DynamicResource TextMuted}" />
                         <Border StrokeShape="RoundRectangle 12"
-                                BackgroundColor="#F8FAFC"
-                                Stroke="#E2E8F0"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                Stroke="{DynamicResource Border}"
                                 StrokeThickness="1"
                                 Padding="10,0">
                             <Entry x:Name="DurationEntry"
                                    Keyboard="Numeric"
-                                   TextColor="#0F172A"
+                                   TextColor="{DynamicResource TextPrimary}"
                                    BackgroundColor="Transparent"
                                    HeightRequest="46" />
                         </Border>
@@ -96,14 +97,14 @@
                         <Label Text="Międzyczasy"
                                FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#64748B"
+                               TextColor="{DynamicResource TextMuted}"
                                VerticalOptions="Center" />
 
                         <Button Grid.Column="1"
                                 Text="+ Dodaj split"
                                 Clicked="OnAddSplitClicked"
-                                BackgroundColor="#EFF6FF"
-                                TextColor="#2563EB"
+                                BackgroundColor="{DynamicResource BlueSoft}"
+                                TextColor="{DynamicResource Blue}"
                                 FontAttributes="Bold"
                                 CornerRadius="12"
                                 HeightRequest="40"
@@ -116,22 +117,22 @@
             </ScrollView>
 
             <Border Grid.Row="2"
-                    BackgroundColor="White"
+                    BackgroundColor="{DynamicResource Surface}"
                     StrokeThickness="0"
                     Padding="16,14">
                 <HorizontalStackLayout Spacing="12"
                                        HorizontalOptions="End">
                     <Button Text="Anuluj"
                             Clicked="OnCancelClicked"
-                            BackgroundColor="#E2E8F0"
-                            TextColor="#0F172A"
+                            BackgroundColor="{DynamicResource SurfaceStrong}"
+                            TextColor="{DynamicResource TextPrimary}"
                             CornerRadius="12"
                             HeightRequest="44" />
 
                     <Button Text="Zapisz"
                             Clicked="OnSaveClicked"
-                            BackgroundColor="#0F172A"
-                            TextColor="White"
+                            BackgroundColor="{DynamicResource PrimaryButton}"
+                            TextColor="{DynamicResource OnPrimaryButton}"
                             CornerRadius="12"
                             HeightRequest="44" />
                 </HorizontalStackLayout>

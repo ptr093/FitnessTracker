@@ -13,7 +13,7 @@ public class RecordItem
     public string DateText { get; set; } = string.Empty;
     public string ExtraText { get; set; } = "-";
 
-    public Color AccentBackground { get; set; } = Color.FromArgb("#FEF3C7");
-    public Color BadgeBackground { get; set; } = Color.FromArgb("#FFF7ED");
-    public Color BadgeTextColor { get; set; } = Color.FromArgb("#C2410C");
+    public Color AccentBackground { get; set; } = FitnessTracker.Services.ThemeService.Get("AmberBadge");
+    public Color BadgeBackground { get; set; } = FitnessTracker.Services.ThemeService.Get("OrangeSoft");
+    public Color BadgeTextColor { get; set; } = FitnessTracker.Services.ThemeService.Get("OrangeBadgeText");
 }

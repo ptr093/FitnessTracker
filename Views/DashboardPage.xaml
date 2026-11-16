@@ -1,269 +1,263 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FitnessTracker.Controls"
              x:Class="FitnessTracker.Views.DashboardPage"
-             Title="Witaj w Treningu!"
-             BackgroundColor="#F1F5F9">
+             Title="FitnessTracker">
 
     <ScrollView>
-        <VerticalStackLayout Padding="15,24,15,35"
-                             Spacing="16"
+        <VerticalStackLayout Padding="15,20,15,35"
+                             Spacing="18"
                              MaximumWidthRequest="620"
-                             HorizontalOptions="Center">
+                             HorizontalOptions="Fill">
 
-            <Label Text="Wybierz akcję"
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   TextColor="#1E293B"
-                   Margin="0,0,0,4" />
-
-            <!-- TRENING SIŁOWY -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#0F172A"
-                    StrokeThickness="0"
-                    MinimumHeightRequest="112"
-                    Padding="18">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToGymCommand}" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="14"
-                      VerticalOptions="Center">
-                    <Label Text="🏋️"
-                           FontSize="34"
-                           VerticalOptions="Center" />
-                    <VerticalStackLayout Grid.Column="1"
-                                         Spacing="2"
-                                         VerticalOptions="Center">
-                        <Label Text="Trening Siłowy"
-                               FontSize="19"
-                               FontAttributes="Bold"
-                               TextColor="White" />
-                        <Label Text="Rejestruj serie i powtórzenia"
-                               FontSize="12"
-                               TextColor="#94A3B8"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
-
-            <!-- MOJE ĆWICZENIA -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#F8FAFC"
-                    Stroke="#CBD5E1"
-                    StrokeThickness="1"
-                    MinimumHeightRequest="112"
-                    Padding="18">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToManageExercisesCommand}" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="14"
-                      VerticalOptions="Center">
-                    <Label Text="🛠️"
-                           FontSize="34"
-                           VerticalOptions="Center" />
-                    <VerticalStackLayout Grid.Column="1"
-                                         Spacing="2"
-                                         VerticalOptions="Center">
-                        <Label Text="Moje ćwiczenia"
-                               FontSize="19"
-                               FontAttributes="Bold"
-                               TextColor="#1E293B" />
-                        <Label Text="Edytuj i usuwaj własne ćwiczenia"
-                               FontSize="12"
-                               TextColor="#64748B"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
-
-            <!-- SZABLONY TRENINGÓW -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#F0FDFA"
-                    Stroke="#99F6E4"
-                    StrokeThickness="1"
-                    MinimumHeightRequest="132"
-                    Padding="16">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToWorkoutTemplatesCommand}" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="12"
-                      VerticalOptions="Center">
-                    <Label Text="📋"
-                           FontSize="32"
-                           VerticalOptions="Center" />
-                    <VerticalStackLayout Grid.Column="1"
-                                         Spacing="3"
-                                         VerticalOptions="Center">
-                        <Label Text="Szablony treningów"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="#115E59"
-                               LineBreakMode="WordWrap" />
-                        <Label Text="Uruchom gotowy plan jednym kliknięciem"
-                               FontSize="12"
-                               TextColor="#0F766E"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
-
-            <!-- BIEGANIE -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#064E3B"
-                    StrokeThickness="0"
-                    MinimumHeightRequest="112"
-                    Padding="18">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToRunCommand}" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="14"
-                      VerticalOptions="Center">
-                    <Label Text="🏃"
-                           FontSize="34"
-                           VerticalOptions="Center" />
-                    <VerticalStackLayout Grid.Column="1"
-                                         Spacing="2"
-                                         VerticalOptions="Center">
-                        <Label Text="Bieganie"
-                               FontSize="19"
-                               FontAttributes="Bold"
-                               TextColor="White" />
-                        <Label Text="Dystans, czas i międzyczasy"
-                               FontSize="12"
-                               TextColor="#D1FAE5"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
-
-            <!-- HISTORIA -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="White"
-                    StrokeThickness="0"
-                    MinimumHeightRequest="112"
-                    Padding="18">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToHistoryCommand}" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="14"
-                      VerticalOptions="Center">
-                    <Label Text="📅"
-                           FontSize="34"
-                           VerticalOptions="Center" />
-                    <VerticalStackLayout Grid.Column="1"
-                                         Spacing="2"
-                                         VerticalOptions="Center">
-                        <Label Text="Historia treningów"
-                               FontSize="19"
-                               FontAttributes="Bold"
-                               TextColor="#1E293B" />
-                        <Label Text="Przeglądaj swoje postępy"
-                               FontSize="12"
-                               TextColor="#64748B"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
-
-            <!-- REKORDY -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#FFF7ED"
-                    Stroke="#FED7AA"
-                    StrokeThickness="1"
-                    MinimumHeightRequest="112"
-                    Padding="18">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToRecordsCommand}" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="14"
-                      VerticalOptions="Center">
-                    <Label Text="🏆"
-                           FontSize="34"
-                           VerticalOptions="Center" />
-                    <VerticalStackLayout Grid.Column="1"
-                                         Spacing="2"
-                                         VerticalOptions="Center">
-                        <Label Text="Rekordy"
-                               FontSize="19"
-                               FontAttributes="Bold"
-                               TextColor="#9A3412" />
-                        <Label Text="Najlepsze wyniki i postęp"
-                               FontSize="12"
-                               TextColor="#C2410C"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
-
-            <!-- ANALITYKA -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#EEF2FF"
-                    Stroke="#C7D2FE"
-                    StrokeThickness="1"
-                    MinimumHeightRequest="112"
-                    Padding="18">
-                <Border.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToStatsCommand}" />
-                </Border.GestureRecognizers>
-                <Grid ColumnDefinitions="Auto,*"
-                      ColumnSpacing="14"
-                      VerticalOptions="Center">
-                    <Label Text="📊"
-                           FontSize="34"
-                           VerticalOptions="Center" />
-                    <VerticalStackLayout Grid.Column="1"
-                                         Spacing="2"
-                                         VerticalOptions="Center">
-                        <Label Text="Analityka i Wilks"
-                               FontSize="19"
-                               FontAttributes="Bold"
-                               TextColor="#3730A3" />
-                        <Label Text="Sprawdź BMI i współczynnik siły"
-                               FontSize="12"
-                               TextColor="#4F46E5"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Grid>
-            </Border>
-
-            <!-- STRAVA -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#F8FAFC"
-                    Stroke="#E2E8F0"
-                    StrokeThickness="1"
-                    Padding="20"
-                    Margin="0,4,0,0">
-                <VerticalStackLayout Spacing="10">
-                    <HorizontalStackLayout Spacing="10">
-                        <Label Text="⌚"
-                               FontSize="18"
+            <!-- NAGŁÓWEK + PODSUMOWANIE -->
+            <controls:PageHeader Title="{Binding Greeting}"
+                                 Subtitle="{Binding TodayText}"
+                                 ShowBack="False">
+                <controls:PageHeader.TrailingContent>
+                    <Border WidthRequest="40"
+                            HeightRequest="40"
+                            StrokeShape="RoundRectangle 12"
+                            StrokeThickness="0"
+                            BackgroundColor="{DynamicResource HeroRaised}"
+                            SemanticProperties.Description="Zmień motyw">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleThemeCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Text="{Binding ThemeIcon}"
+                               FontFamily="MaterialSymbols"
+                               FontSize="22"
+                               TextColor="{DynamicResource OnHero}"
+                               HorizontalOptions="Center"
                                VerticalOptions="Center" />
-                        <Label Text="Synchronizacja Strava"
-                               FontSize="16"
-                               FontAttributes="Bold"
-                               TextColor="#1E293B"
+                    </Border>
+                </controls:PageHeader.TrailingContent>
+
+                <controls:PageHeader.BodyContent>
+                    <Grid ColumnDefinitions="*,*,*"
+                          ColumnSpacing="10">
+                        <Border BackgroundColor="{DynamicResource HeroRaised}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Ten tydzień"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource OnHeroSubtle}" />
+                                <Label Text="{Binding WeekCountText}"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource OnHero}" />
+                                <Label Text="dni treningu"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource OnHeroSubtle}" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="1"
+                                BackgroundColor="{DynamicResource HeroRaised}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Seria"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource OnHeroSubtle}" />
+                                <Label Text="{Binding StreakText}"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource OrangeOnHero}" />
+                                <Label Text="z rzędu"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource OnHeroSubtle}" />
+                            </VerticalStackLayout>
+                        </Border>
+
+                        <Border Grid.Column="2"
+                                BackgroundColor="{DynamicResource HeroRaised}"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 14"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Ostatni"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource OnHeroSubtle}" />
+                                <Label Text="{Binding LastWorkoutText}"
+                                       FontSize="22"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource OnHero}"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding LastWorkoutDetail}"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource OnHeroSubtle}"
+                                       LineBreakMode="WordWrap"
+                                       MaxLines="2" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </controls:PageHeader.BodyContent>
+            </controls:PageHeader>
+
+            <!-- START TRENINGU -->
+            <Grid ColumnDefinitions="3*,2*"
+                  ColumnSpacing="12">
+
+                <Border BackgroundColor="{DynamicResource GreenBright}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 18"
+                        Padding="18"
+                        MinimumHeightRequest="120"
+                        SemanticProperties.Description="Rozpocznij trening siłowy">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToGymCommand}" />
+                    </Border.GestureRecognizers>
+                    <Grid RowDefinitions="*,Auto">
+                        <Label Text="&#xeb43;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="32"
+                               TextColor="{DynamicResource OnGreenBright}"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Start" />
+                        <VerticalStackLayout Grid.Row="1"
+                                             Spacing="0">
+                            <Label Text="Rozpocznij"
+                                   FontSize="12"
+                                   TextColor="{DynamicResource OnGreenBright}"
+                                   Opacity="0.75" />
+                            <Label Text="Trening siłowy"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource OnGreenBright}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1"
+                        BackgroundColor="{DynamicResource HeroRun}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 18"
+                        Padding="18"
+                        MinimumHeightRequest="120"
+                        SemanticProperties.Description="Zapisz bieg">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding GoToRunCommand}" />
+                    </Border.GestureRecognizers>
+                    <Grid RowDefinitions="*,Auto">
+                        <Label Text="&#xe566;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="32"
+                               TextColor="{DynamicResource OnHero}"
+                               HorizontalOptions="Start"
+                               VerticalOptions="Start" />
+                        <VerticalStackLayout Grid.Row="1"
+                                             Spacing="0">
+                            <Label Text="Zapisz"
+                                   FontSize="12"
+                                   TextColor="{DynamicResource OnHeroMuted}" />
+                            <Label Text="Bieg"
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource OnHero}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- PLAN -->
+            <Label Text="Plan"
+                   Style="{StaticResource TextOverline}"
+                   Margin="4,6,0,-6" />
+            <Grid ColumnDefinitions="*,*"
+                  ColumnSpacing="12">
+                <controls:ActionTile Icon="&#xe85d;"
+                                     Accent="Teal"
+                                     Title="Szablony"
+                                     Subtitle="Gotowe treningi jednym kliknięciem"
+                                     Command="{Binding GoToWorkoutTemplatesCommand}" />
+                <controls:ActionTile Grid.Column="1"
+                                     Icon="&#xe869;"
+                                     Accent="Blue"
+                                     Title="Moje ćwiczenia"
+                                     Subtitle="Edytuj własne ćwiczenia"
+                                     Command="{Binding GoToManageExercisesCommand}" />
+            </Grid>
+
+            <!-- ANALIZA -->
+            <Label Text="Analiza"
+                   Style="{StaticResource TextOverline}"
+                   Margin="4,6,0,-6" />
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="12"
+                  RowSpacing="12">
+                <controls:ActionTile Icon="&#xebcc;"
+                                     Accent="Blue"
+                                     Title="Historia"
+                                     Subtitle="Przeglądaj i edytuj treningi"
+                                     Command="{Binding GoToHistoryCommand}" />
+                <controls:ActionTile Grid.Column="1"
+                                     Icon="&#xea23;"
+                                     Accent="Orange"
+                                     Title="Rekordy"
+                                     Subtitle="Najlepsze wyniki"
+                                     Command="{Binding GoToRecordsCommand}" />
+                <controls:ActionTile Grid.Row="1"
+                                     Icon="&#xe8e5;"
+                                     Accent="Green"
+                                     Title="Postęp"
+                                     Subtitle="Wykres 1RM i serie na partię"
+                                     Command="{Binding GoToProgressCommand}" />
+                <controls:ActionTile Grid.Row="1"
+                                     Grid.Column="1"
+                                     Icon="&#xf092;"
+                                     Accent="Indigo"
+                                     Title="Analityka"
+                                     Subtitle="BMI i punkty Wilksa"
+                                     Command="{Binding GoToStatsCommand}" />
+            </Grid>
+
+            <!-- DANE -->
+            <Label Text="Dane"
+                   Style="{StaticResource TextOverline}"
+                   Margin="4,6,0,-6" />
+            <Border Style="{StaticResource Card}"
+                    Padding="14">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToDataSyncCommand}" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      ColumnSpacing="14">
+                    <Border WidthRequest="42"
+                            HeightRequest="42"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            BackgroundColor="{DynamicResource SurfaceStrong}">
+                        <Label Text="&#xe334;"
+                               FontFamily="MaterialSymbols"
+                               FontSize="24"
+                               TextColor="{DynamicResource TextPrimary}"
+                               HorizontalOptions="Center"
                                VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                    <Label Text="Pobierz swoje najnowsze aktywności biegowe bezpośrednio z zewnętrznego konta."
-                           FontSize="13"
-                           TextColor="#64748B"
-                           LineBreakMode="WordWrap" />
-                    <Button Text="{Binding SyncButtonText}"
-                            Command="{Binding SyncApiWorkoutsCommand}"
-                            BackgroundColor="#2563EB"
-                            TextColor="White"
-                            CornerRadius="12"
-                            HeightRequest="50"
-                            FontAttributes="Bold"
-                            IsEnabled="{Binding IsNotSyncing}" />
-                </VerticalStackLayout>
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1"
+                                         Spacing="2"
+                                         VerticalOptions="Center">
+                        <Label Text="Garmin i kopia zapasowa"
+                               FontSize="15"
+                               FontAttributes="Bold" />
+                        <Label Text="Pobierz treningi z zegarka, eksportuj dane"
+                               Style="{StaticResource TextCaption}" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="2"
+                           Text="&#xe5cc;"
+                           FontFamily="MaterialSymbols"
+                           FontSize="24"
+                           TextColor="{DynamicResource TextMuted}"
+                           VerticalOptions="Center" />
+                </Grid>
             </Border>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

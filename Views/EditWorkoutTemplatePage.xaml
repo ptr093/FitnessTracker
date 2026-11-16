@@ -1,81 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FitnessTracker.Controls"
              x:Class="FitnessTracker.Views.EditWorkoutTemplatePage"
-             Title="Edytuj szablon"
-             BackgroundColor="#F1F5F9">
+             Title="Edytuj szablon">
 
     <Grid RowDefinitions="*,Auto">
         <ScrollView Grid.Row="0">
             <VerticalStackLayout Padding="15,20,15,30"
                                  Spacing="16"
                                  MaximumWidthRequest="620"
-                                 HorizontalOptions="Center">
+                                 HorizontalOptions="Fill">
 
-                <Border Padding="18"
-                        BackgroundColor="#0F766E"
-                        StrokeThickness="0"
-                        StrokeShape="RoundRectangle 20">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Szablon treningu"
-                               FontSize="22"
-                               FontAttributes="Bold"
-                               TextColor="White" />
-                        <Label Text="Dodaj ćwiczenia i określ liczbę serii. Przy rozpoczęciu podpowiemy dane z ostatniego treningu."
-                               FontSize="13"
-                               TextColor="#CCFBF1"
-                               LineBreakMode="WordWrap" />
-                    </VerticalStackLayout>
-                </Border>
+                <controls:PageHeader Title="Szablon treningu"
+                                     Subtitle="Dodaj ćwiczenia i liczbę serii. Przy starcie podpowiemy dane z ostatniego treningu."
+                                     BackgroundKey="TealStrong" />
 
                 <Border Padding="16"
-                        BackgroundColor="White"
-                        Stroke="#E2E8F0"
+                        BackgroundColor="{DynamicResource Surface}"
+                        Stroke="{DynamicResource Border}"
                         StrokeThickness="1"
                         StrokeShape="RoundRectangle 18">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="SZCZEGÓŁY SZABLONU"
                                FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#64748B" />
+                               TextColor="{DynamicResource TextMuted}" />
 
                         <Entry Text="{Binding TemplateName, Mode=TwoWay}"
                                Placeholder="np. Trening klaty"
-                               TextColor="#0F172A"
-                               PlaceholderColor="#94A3B8"
-                               BackgroundColor="#F8FAFC"
+                               TextColor="{DynamicResource TextPrimary}"
+                               PlaceholderColor="{DynamicResource Placeholder}"
+                               BackgroundColor="{DynamicResource SurfaceMuted}"
                                HeightRequest="48" />
 
                         <Entry Text="{Binding Description, Mode=TwoWay}"
                                Placeholder="Opis opcjonalny, np. poniedziałek"
-                               TextColor="#0F172A"
-                               PlaceholderColor="#94A3B8"
-                               BackgroundColor="#F8FAFC"
+                               TextColor="{DynamicResource TextPrimary}"
+                               PlaceholderColor="{DynamicResource Placeholder}"
+                               BackgroundColor="{DynamicResource SurfaceMuted}"
                                HeightRequest="48" />
                     </VerticalStackLayout>
                 </Border>
 
                 <Border Padding="16"
-                        BackgroundColor="White"
-                        Stroke="#E2E8F0"
+                        BackgroundColor="{DynamicResource Surface}"
+                        Stroke="{DynamicResource Border}"
                         StrokeThickness="1"
                         StrokeShape="RoundRectangle 18">
                     <VerticalStackLayout Spacing="10">
                         <Label Text="DODAJ ĆWICZENIE"
                                FontSize="12"
                                FontAttributes="Bold"
-                               TextColor="#64748B" />
+                               TextColor="{DynamicResource TextMuted}" />
 
                         <Picker ItemsSource="{Binding Categories}"
                                 SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-                                TextColor="#0F172A"
-                                BackgroundColor="#F8FAFC"
+                                TextColor="{DynamicResource TextPrimary}"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
                                 HeightRequest="48" />
 
                         <Picker ItemsSource="{Binding AvailableExercises}"
                                 SelectedItem="{Binding SelectedExercise, Mode=TwoWay}"
-                                TextColor="#0F172A"
-                                BackgroundColor="#F8FAFC"
+                                TextColor="{DynamicResource TextPrimary}"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
                                 HeightRequest="48" />
 
                         <Grid ColumnDefinitions="Auto,*,Auto"
@@ -84,8 +72,8 @@
 
                             <Button Text="−"
                                     Command="{Binding DecreaseSetCountCommand}"
-                                    BackgroundColor="#E2E8F0"
-                                    TextColor="#0F172A"
+                                    BackgroundColor="{DynamicResource SurfaceStrong}"
+                                    TextColor="{DynamicResource TextPrimary}"
                                     FontSize="18"
                                     FontAttributes="Bold"
                                     CornerRadius="10"
@@ -96,15 +84,15 @@
                                    Text="{Binding SelectedSetCount, StringFormat='Liczba serii: {0}'}"
                                    FontSize="14"
                                    FontAttributes="Bold"
-                                   TextColor="#334155"
+                                   TextColor="{DynamicResource TextSecondary}"
                                    HorizontalTextAlignment="Center"
                                    VerticalTextAlignment="Center" />
 
                             <Button Grid.Column="2"
                                     Text="+"
                                     Command="{Binding IncreaseSetCountCommand}"
-                                    BackgroundColor="#E2E8F0"
-                                    TextColor="#0F172A"
+                                    BackgroundColor="{DynamicResource SurfaceStrong}"
+                                    TextColor="{DynamicResource TextPrimary}"
                                     FontSize="18"
                                     FontAttributes="Bold"
                                     CornerRadius="10"
@@ -114,8 +102,8 @@
 
                         <Button Text="+ Dodaj ćwiczenie"
                                 Command="{Binding AddExerciseCommand}"
-                                BackgroundColor="#EFF6FF"
-                                TextColor="#2563EB"
+                                BackgroundColor="{DynamicResource BlueSoft}"
+                                TextColor="{DynamicResource Blue}"
                                 FontAttributes="Bold"
                                 CornerRadius="12"
                                 HeightRequest="44" />
@@ -126,41 +114,41 @@
                     <Label Text="ĆWICZENIA W SZABLONIE"
                            FontSize="12"
                            FontAttributes="Bold"
-                           TextColor="#64748B" />
+                           TextColor="{DynamicResource TextMuted}" />
 
                     <VerticalStackLayout BindableLayout.ItemsSource="{Binding Exercises}"
                                          Spacing="10">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Border Padding="12"
-                                        BackgroundColor="White"
-                                        Stroke="#E2E8F0"
+                                        BackgroundColor="{DynamicResource Surface}"
+                                        Stroke="{DynamicResource Border}"
                                         StrokeThickness="1"
-                                        StrokeShape="RoundRectangle 16">
+                                        StrokeShape="RoundRectangle 14">
                                     <Grid ColumnDefinitions="*,Auto"
                                           ColumnSpacing="10">
                                         <VerticalStackLayout Grid.Column="0"
                                                              Spacing="3">
                                             <Label Text="{Binding Exercise}"
-                                                   FontSize="15"
+                                                   FontSize="14"
                                                    FontAttributes="Bold"
-                                                   TextColor="#0F172A"
+                                                   TextColor="{DynamicResource TextPrimary}"
                                                    LineBreakMode="WordWrap" />
                                             <Label Text="{Binding Category}"
                                                    FontSize="12"
-                                                   TextColor="#64748B" />
+                                                   TextColor="{DynamicResource TextMuted}" />
                                             <Label Text="{Binding SetCount, StringFormat='Serie: {0}'}"
                                                    FontSize="12"
                                                    FontAttributes="Bold"
-                                                   TextColor="#0F766E" />
+                                                   TextColor="{DynamicResource Teal}" />
                                         </VerticalStackLayout>
 
                                         <Button Grid.Column="1"
                                                 Text="Usuń"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveExerciseCommand}"
                                                 CommandParameter="{Binding .}"
-                                                BackgroundColor="#FFF1F2"
-                                                TextColor="#E11D48"
+                                                BackgroundColor="{DynamicResource RedSoft}"
+                                                TextColor="{DynamicResource Red}"
                                                 FontAttributes="Bold"
                                                 CornerRadius="10"
                                                 HeightRequest="40"
@@ -177,23 +165,23 @@
 
         <Border Grid.Row="1"
                 Padding="12"
-                BackgroundColor="White"
-                Stroke="#E2E8F0"
+                BackgroundColor="{DynamicResource Surface}"
+                Stroke="{DynamicResource Border}"
                 StrokeThickness="1">
             <Grid ColumnDefinitions="Auto,*"
                   ColumnSpacing="10">
                 <Button Text="Anuluj"
                         Command="{Binding CancelCommand}"
-                        BackgroundColor="#E2E8F0"
-                        TextColor="#0F172A"
+                        BackgroundColor="{DynamicResource SurfaceStrong}"
+                        TextColor="{DynamicResource TextPrimary}"
                         CornerRadius="12"
                         HeightRequest="48"
                         Padding="16,0" />
                 <Button Grid.Column="1"
                         Text="{Binding SaveButtonText}"
                         Command="{Binding SaveCommand}"
-                        BackgroundColor="#0F766E"
-                        TextColor="White"
+                        BackgroundColor="{DynamicResource TealStrong}"
+                        TextColor="{DynamicResource OnHero}"
                         FontAttributes="Bold"
                         CornerRadius="12"
                         HeightRequest="48" />

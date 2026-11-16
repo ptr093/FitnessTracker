@@ -7,6 +7,10 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+
+        // Kolory motywu muszą być w zasobach, zanim powstanie pierwsza strona
+        FitnessTracker.Services.ThemeService.Initialize(this);
+
         MainPage = new AppShell();
 
         AppDomain.CurrentDomain.UnhandledException += (_, args) =>

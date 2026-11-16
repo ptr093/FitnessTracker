@@ -31,6 +31,12 @@ public class DatabaseService
 
         await TryAddColumnAsync(
             "ALTER TABLE Workout ADD COLUMN Location TEXT NULL");
+
+        await TryAddColumnAsync(
+            "ALTER TABLE Workout ADD COLUMN ExternalId TEXT NULL");
+
+        await TryAddColumnAsync(
+            "ALTER TABLE Workout ADD COLUMN AverageHeartRate REAL NULL");
     }
 
     private async Task TryAddColumnAsync(string sql)
@@ -89,17 +95,82 @@ public class DatabaseService
             .ToListAsync();
     }
 
-    public async Task<bool> ExistsByStravaActivityIdAsync(long stravaActivityId)
+    public async Task<bool> ExistsByExternalIdAsync(string externalId)
     {
         await Init();
 
         var existing = await _connection!
             .Table<Workout>()
-            .Where(w => w.StravaActivityId == stravaActivityId)
+            .Where(w => w.ExternalId == externalId)
             .FirstOrDefaultAsync();
 
         return existing != null;
     }
+
+    // =========================================================
+    // KOPIA ZAPASOWA
+    // =========================================================
+
+    public async Task<List<WorkoutTemplateExercise>> GetAllTemplateExercisesAsync()
+    {
+        await Init();
+        return await _connection!.Table<WorkoutTemplateExercise>().ToListAsync();
+    }
+
+    /// <summary>
+    /// Dodaje dane z kopii zapasowej, pomijając treningi, które już są w bazie
+    /// (ten sam typ, data, ćwiczenie/dystans). Zwraca liczbę dodanych treningów i szablonów.
+    /// </summary>
+    public async Task<(int Workouts, int Templates)> ImportBackupAsync(
+        IEnumerable<Workout> workouts,
+        IEnumerable<WorkoutTemplate> templates,
+        IEnumerable<WorkoutTemplateExercise> templateExercises)
+    {
+        await Init();
+
+        var existing = await GetWorkoutsAsync();
+        var existingKeys = existing.Select(BackupKey).ToHashSet();
+
+        var newWorkouts = new List<Workout>();
+        foreach (var workout in workouts)
+        {
+            var key = BackupKey(workout);
+            if (!existingKeys.Add(key))
+                continue;
+
+            workout.Id = 0;
+            newWorkouts.Add(workout);
+        }
+
+        if (newWorkouts.Count > 0)
+            await _connection!.InsertAllAsync(newWorkouts);
+
+        var existingTemplateNames = (await GetWorkoutTemplatesAsync())
+            .Select(t => t.Name)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var exercisesByTemplate = templateExercises
+            .GroupBy(e => e.TemplateId)
+            .ToDictionary(g => g.Key, g => g.OrderBy(e => e.SortOrder).ToList());
+
+        var importedTemplates = 0;
+        foreach (var template in templates)
+        {
+            if (string.IsNullOrWhiteSpace(template.Name) || !existingTemplateNames.Add(template.Name.Trim()))
+                continue;
+
+            var oldId = template.Id;
+            template.Id = 0;
+            exercisesByTemplate.TryGetValue(oldId, out var items);
+            await SaveWorkoutTemplateAsync(template, items ?? new List<WorkoutTemplateExercise>());
+            importedTemplates++;
+        }
+
+        return (newWorkouts.Count, importedTemplates);
+    }
+
+    private static string BackupKey(Workout w) =>
+        $"{w.Type}|{w.Date:yyyyMMddHHmmss}|{w.Exercise}|{w.Distance:0.###}";
 
     // =========================================================
     // SZABLONY TRENINGÓW
@@ -202,6 +273,47 @@ public class DatabaseService
             "DELETE FROM WorkoutTemplates WHERE Id = ?",
             templateId);
     }
+
+    /// <summary>
+    /// Zwraca ostatni trening siłowy dla danego ćwiczenia, a jeśli go nie ma
+    /// (lub ćwiczenie nie jest podane) – ostatni trening z danej partii.
+    /// </summary>
+    public async Task<Workout?> GetLastGymWorkoutAsync(string? category, string? exercise)
+    {
+        await Init();
+
+        if (!string.IsNullOrWhiteSpace(exercise))
+        {
+            var byExercise = await _connection!
+                .Table<Workout>()
+                .Where(x => x.Type == "Siłownia" && x.Exercise == exercise)
+                .OrderByDescending(x => x.Date)
+                .FirstOrDefaultAsync();
+
+            if (byExercise != null)
+                return byExercise;
+        }
+
+        if (string.IsNullOrWhiteSpace(category))
+            return null;
+
+        return await _connection!
+            .Table<Workout>()
+            .Where(x => x.Type == "Siłownia" && x.Category == category)
+            .OrderByDescending(x => x.Date)
+            .FirstOrDefaultAsync();
+    }
+
+    public static List<WorkoutSet> GetOrderedSets(Workout workout) =>
+        DeserializeGymSets(workout.GymSetsJson)
+            .OrderBy(x => x.SetNumber)
+            .Select((set, index) => new WorkoutSet
+            {
+                SetNumber = index + 1,
+                Weight = set.Weight,
+                Reps = set.Reps
+            })
+            .ToList();
 
     public async Task<List<WorkoutSet>> GetLastGymSetsForExerciseAsync(
         string exercise)

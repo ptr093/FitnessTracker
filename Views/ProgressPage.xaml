@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FitnessTracker.Controls"
+             x:Class="FitnessTracker.Views.ProgressPage"
+             Title="Postęp">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="15,20"
+                             Spacing="18"
+                             MaximumWidthRequest="620"
+                             HorizontalOptions="Fill">
+
+            <controls:PageHeader Title="Postęp"
+                                 Subtitle="Szacowany 1RM, maksymalny ciężar i objętość w czasie." />
+
+            <Label Text="Brak treningów siłowych — zapisz kilka, a pojawi się wykres."
+                   IsVisible="{Binding IsEmpty}"
+                   FontSize="14"
+                   TextColor="{DynamicResource TextMuted}"
+                   HorizontalTextAlignment="Center" />
+
+            <!-- WYKRES -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="{DynamicResource Surface}"
+                    StrokeThickness="0"
+                    Padding="18">
+                <VerticalStackLayout Spacing="14">
+                    <Grid ColumnDefinitions="*,*"
+                          ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="ĆWICZENIE"
+                                   FontSize="11"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource TextMuted}" />
+                            <Border StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="{DynamicResource SurfaceMuted}"
+                                    Stroke="{DynamicResource Border}"
+                                    Padding="10,0">
+                                <Picker ItemsSource="{Binding Exercises}"
+                                        SelectedItem="{Binding SelectedExercise, Mode=TwoWay}"
+                                        TextColor="{DynamicResource TextPrimary}"
+                                        FontSize="13"
+                                        HeightRequest="44"
+                                        BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="6">
+                            <Label Text="MIARA"
+                                   FontSize="11"
+                                   FontAttributes="Bold"
+                                   TextColor="{DynamicResource TextMuted}" />
+                            <Border StrokeShape="RoundRectangle 12"
+                                    BackgroundColor="{DynamicResource SurfaceMuted}"
+                                    Stroke="{DynamicResource Border}"
+                                    Padding="10,0">
+                                <Picker ItemsSource="{Binding Metrics}"
+                                        SelectedItem="{Binding SelectedMetric, Mode=TwoWay}"
+                                        TextColor="{DynamicResource TextPrimary}"
+                                        FontSize="13"
+                                        HeightRequest="44"
+                                        BackgroundColor="Transparent" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <GraphicsView x:Name="ChartView"
+                                  HeightRequest="220" />
+
+                    <Grid ColumnDefinitions="*,*,*"
+                          ColumnSpacing="10">
+                        <Border StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Najlepszy"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource TextMuted}" />
+                                <Label Text="{Binding BestValueText}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource TextPrimary}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="1"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Zmiana"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource TextMuted}" />
+                                <Label Text="{Binding ChangeText}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{Binding ChangeColor}" />
+                            </VerticalStackLayout>
+                        </Border>
+                        <Border Grid.Column="2"
+                                StrokeShape="RoundRectangle 12"
+                                BackgroundColor="{DynamicResource SurfaceMuted}"
+                                StrokeThickness="0"
+                                Padding="12">
+                            <VerticalStackLayout Spacing="2">
+                                <Label Text="Treningi"
+                                       FontSize="11"
+                                       TextColor="{DynamicResource TextMuted}" />
+                                <Label Text="{Binding SessionsText}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="{DynamicResource TextPrimary}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- OBJĘTOŚĆ TYGODNIOWA -->
+            <Border StrokeShape="RoundRectangle 18"
+                    BackgroundColor="{DynamicResource Surface}"
+                    StrokeThickness="0"
+                    Padding="18">
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="{DynamicResource TextPrimary}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="&#xebcc;" FontFamily="MaterialSymbols" />
+                                <Span Text="  Serie tygodniowo na partię" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label Text="{Binding WeekRangeText}"
+                           FontSize="12"
+                           TextColor="{DynamicResource TextMuted}" />
+
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding WeeklyVolume}"
+                                         Spacing="12">
+                        <BindableLayout.EmptyView>
+                            <Label Text="Brak treningów w ostatnich dwóch tygodniach."
+                                   FontSize="13"
+                                   TextColor="{DynamicResource TextMuted}" />
+                        </BindableLayout.EmptyView>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout Spacing="4">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="{Binding Category}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{DynamicResource TextPrimary}" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding SetsText}"
+                                               FontSize="14"
+                                               FontAttributes="Bold"
+                                               TextColor="{DynamicResource Indigo}" />
+                                    </Grid>
+                                    <ProgressBar Progress="{Binding BarProgress}"
+                                                 ProgressColor="{DynamicResource Indigo}" />
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <Label Text="{Binding CompareText}"
+                                               FontSize="11"
+                                               TextColor="{DynamicResource TextMuted}" />
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Hint}"
+                                               FontSize="11"
+                                               TextColor="{DynamicResource TextMuted}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

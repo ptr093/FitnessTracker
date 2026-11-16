@@ -1,27 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:FitnessTracker.Controls"
              x:Class="FitnessTracker.Views.ManageExercisesPage"
-             Title="Moje ćwiczenia"
-             BackgroundColor="#F1F5F9">
+             Title="Moje ćwiczenia">
 
     <Grid RowDefinitions="Auto,Auto,*"
-          RowSpacing="0">
+          RowSpacing="0"
+          MaximumWidthRequest="620">
 
-        <!-- INFORMACJA -->
-        <Border Grid.Row="0"
-                Margin="15,15,15,12"
-                Padding="16"
-                BackgroundColor="White"
-                Stroke="#E2E8F0"
-                StrokeThickness="1"
-                StrokeShape="RoundRectangle 18">
-
-            <Label Text="Tutaj możesz edytować lub usuwać własne ćwiczenia. Zmiany dotyczą listy wyboru; zapisane treningi pozostają w historii."
-                   FontSize="13"
-                   TextColor="#64748B"
-                   LineBreakMode="WordWrap" />
-        </Border>
+        <controls:PageHeader Grid.Row="0"
+                             Margin="15,20,15,12"
+                             Title="Moje ćwiczenia"
+                             Subtitle="Edytuj lub usuń własne ćwiczenia. Zapisane treningi zostają w historii." />
 
         <!-- FILTR PARTII -->
         <VerticalStackLayout Grid.Row="1"
@@ -31,19 +22,19 @@
             <Label Text="PARTIA MIĘŚNIOWA"
                    FontSize="12"
                    FontAttributes="Bold"
-                   TextColor="#64748B" />
+                   TextColor="{DynamicResource TextMuted}" />
 
             <Border HeightRequest="58"
                     Padding="12,0"
-                    BackgroundColor="White"
-                    Stroke="#E2E8F0"
+                    BackgroundColor="{DynamicResource Surface}"
+                    Stroke="{DynamicResource Border}"
                     StrokeThickness="1"
                     StrokeShape="RoundRectangle 14">
 
                 <Picker ItemsSource="{Binding Categories}"
                         SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                         Title="Wybierz partię"
-                        TextColor="#0F172A"
+                        TextColor="{DynamicResource TextPrimary}"
                         FontAttributes="Bold"
                         HeightRequest="56"
                         VerticalOptions="Center"
@@ -67,12 +58,12 @@
                     <Label Text="Brak własnych ćwiczeń"
                            FontSize="18"
                            FontAttributes="Bold"
-                           TextColor="#334155"
+                           TextColor="{DynamicResource TextSecondary}"
                            HorizontalTextAlignment="Center" />
 
                     <Label Text="Dodaj własne ćwiczenie podczas rejestracji treningu siłowego."
                            FontSize="13"
-                           TextColor="#64748B"
+                           TextColor="{DynamicResource TextMuted}"
                            HorizontalTextAlignment="Center"
                            LineBreakMode="WordWrap" />
                 </VerticalStackLayout>
@@ -83,8 +74,8 @@
                     <Border Margin="0,0,0,10"
                             Padding="12"
                             MinimumHeightRequest="64"
-                            BackgroundColor="White"
-                            Stroke="#E2E8F0"
+                            BackgroundColor="{DynamicResource Surface}"
+                            Stroke="{DynamicResource Border}"
                             StrokeThickness="1"
                             StrokeShape="RoundRectangle 14">
 
@@ -95,7 +86,7 @@
                             <Label Grid.Column="0"
                                    Text="{Binding Name}"
                                    FontSize="14"
-                                   TextColor="#1E293B"
+                                   TextColor="{DynamicResource TextPrimary}"
                                    VerticalOptions="Center"
                                    LineBreakMode="TailTruncation" />
 
@@ -104,8 +95,8 @@
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
                                                       Path=BindingContext.EditExerciseCommand}"
                                     CommandParameter="{Binding .}"
-                                    BackgroundColor="#EFF6FF"
-                                    TextColor="#2563EB"
+                                    BackgroundColor="{DynamicResource BlueSoft}"
+                                    TextColor="{DynamicResource Blue}"
                                     FontAttributes="Bold"
                                     FontSize="14"
                                     CornerRadius="12"
@@ -117,8 +108,8 @@
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
                                                       Path=BindingContext.DeleteExerciseCommand}"
                                     CommandParameter="{Binding .}"
-                                    BackgroundColor="#FFF1F2"
-                                    TextColor="#E11D48"
+                                    BackgroundColor="{DynamicResource RedSoft}"
+                                    TextColor="{DynamicResource Red}"
                                     FontAttributes="Bold"
                                     CornerRadius="12"
                                     HeightRequest="44"

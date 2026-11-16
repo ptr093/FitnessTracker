@@ -17,6 +17,8 @@ namespace FitnessTracker
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    // Ikony interfejsu (Google Material Icons Round, licencja Apache 2.0)
+                    fonts.AddFont("MaterialIconsRound-Regular.otf", "MaterialSymbols");
                 });
 
 #if DEBUG
@@ -27,8 +29,15 @@ namespace FitnessTracker
 
             // Nasze serwisy
             builder.Services.AddSingleton<DatabaseService>();
-            builder.Services.AddSingleton<ApiService>();
             builder.Services.AddSingleton<ExerciseCatalogService>();
+            builder.Services.AddSingleton<BackupService>();
+            builder.Services.AddSingleton<FitImportService>();
+            builder.Services.AddSingleton<GarminApiService>();
+
+            builder.Services.AddTransient<ProgressViewModel>();
+            builder.Services.AddTransient<DataSyncViewModel>();
+            builder.Services.AddTransient<ProgressPage>();
+            builder.Services.AddTransient<DataSyncPage>();
 
 
             builder.Services.AddTransient<GymWorkoutViewModel>();

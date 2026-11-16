@@ -27,7 +27,7 @@ public partial class EditRunWorkoutPopup : Popup
         {
             try
             {
-                var savedSplits = JsonSerializer.Deserialize<List<double>>(workout.SplitsJson);
+                var savedSplits = FitnessTracker.Services.RunSplitsSerializer.Deserialize(workout.SplitsJson);
                 if (savedSplits != null)
                 {
                     _splits.Clear();
@@ -55,7 +55,7 @@ public partial class EditRunWorkoutPopup : Popup
                 Text = $"Split {splitIndex + 1}",
                 FontSize = 13,
                 FontAttributes = FontAttributes.Bold,
-                TextColor = Color.FromArgb("#0F172A"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary"),
                 VerticalOptions = LayoutOptions.Center
             };
 
@@ -65,15 +65,15 @@ public partial class EditRunWorkoutPopup : Popup
                     ? $"Tempo: {ConvertSpeedToPace(_splits[splitIndex])}/km"
                     : "Podaj prędkość w km/h",
                 FontSize = 12,
-                TextColor = Color.FromArgb("#64748B"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextMuted"),
                 VerticalOptions = LayoutOptions.Center
             };
 
             var deleteButton = new Button
             {
                 Text = "Usuń",
-                BackgroundColor = Color.FromArgb("#FEF2F2"),
-                TextColor = Color.FromArgb("#DC2626"),
+                BackgroundColor = FitnessTracker.Services.ThemeService.Get("RedSoft"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("Red"),
                 CornerRadius = 10,
                 HeightRequest = 36,
                 FontAttributes = FontAttributes.Bold,
@@ -96,7 +96,7 @@ public partial class EditRunWorkoutPopup : Popup
                     : string.Empty,
                 Placeholder = "np. 13.6",
                 Keyboard = Keyboard.Numeric,
-                TextColor = Color.FromArgb("#0F172A"),
+                TextColor = FitnessTracker.Services.ThemeService.Get("TextPrimary"),
                 BackgroundColor = Colors.Transparent,
                 HeightRequest = 44,
                 HorizontalTextAlignment = TextAlignment.Center
@@ -149,8 +149,8 @@ public partial class EditRunWorkoutPopup : Popup
             var inputBorder = new Border
             {
                 StrokeShape = new RoundRectangle { CornerRadius = 12 },
-                BackgroundColor = Colors.White,
-                Stroke = Color.FromArgb("#E2E8F0"),
+                BackgroundColor = FitnessTracker.Services.ThemeService.Get("Surface"),
+                Stroke = FitnessTracker.Services.ThemeService.Get("Border"),
                 StrokeThickness = 1,
                 Padding = new Thickness(10, 0),
                 Content = speedEntry
@@ -165,7 +165,7 @@ public partial class EditRunWorkoutPopup : Popup
                     {
                         Text = "Prędkość (km/h)",
                         FontSize = 12,
-                        TextColor = Color.FromArgb("#64748B")
+                        TextColor = FitnessTracker.Services.ThemeService.Get("TextMuted")
                     },
                     inputBorder
                 }
@@ -174,8 +174,8 @@ public partial class EditRunWorkoutPopup : Popup
             var card = new Border
             {
                 StrokeShape = new RoundRectangle { CornerRadius = 14 },
-                BackgroundColor = Color.FromArgb("#F8FAFC"),
-                Stroke = Color.FromArgb("#E2E8F0"),
+                BackgroundColor = FitnessTracker.Services.ThemeService.Get("SurfaceMuted"),
+                Stroke = FitnessTracker.Services.ThemeService.Get("Border"),
                 StrokeThickness = 1,
                 Padding = 14,
                 Content = new VerticalStackLayout

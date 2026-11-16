@@ -2,46 +2,26 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:controls="clr-namespace:FitnessTracker.Controls"
              x:Class="FitnessTracker.Views.RunWorkoutPage"
-             Title="Bieganie"
-             BackgroundColor="#F1F5F9">
+             Title="Bieganie">
 
     <ScrollView>
         <VerticalStackLayout Padding="15,20"
                              Spacing="18"
                              MaximumWidthRequest="620"
-                             HorizontalOptions="Center">
+                             HorizontalOptions="Fill">
 
-            <!-- HEADER -->
-            <Border StrokeShape="RoundRectangle 20"
-                    BackgroundColor="#064E3B"
-                    StrokeThickness="0"
-                    Padding="20">
-                <Border.Shadow>
-                    <Shadow Brush="#064E3B"
-                            Offset="0,6"
-                            Radius="12"
-                            Opacity="0.22" />
-                </Border.Shadow>
-
-                <VerticalStackLayout Spacing="6">
-                    <Label Text="Trening biegowy"
-                           FontSize="24"
-                           FontAttributes="Bold"
-                           TextColor="White" />
-
-                    <Label Text="Uzupełnij dystans, czas i międzyczasy w bardziej nowoczesnym widoku."
-                           FontSize="13"
-                           TextColor="#D1FAE5" />
-                </VerticalStackLayout>
-            </Border>
+            <controls:PageHeader Title="Bieganie"
+                                 Subtitle="Dystans, czas i międzyczasy na kilometr."
+                                 BackgroundKey="HeroRun" />
 
             <!-- KARTA: SZCZEGÓŁY BIEGU -->
             <Border StrokeShape="RoundRectangle 18"
-                    BackgroundColor="White"
+                    BackgroundColor="{DynamicResource Surface}"
                     StrokeThickness="0">
                 <Border.Shadow>
-                    <Shadow Brush="#334155"
+                    <Shadow Brush="{DynamicResource Shadow}"
                             Offset="0,4"
                             Radius="10"
                             Opacity="0.08" />
@@ -51,13 +31,13 @@
                                      Spacing="16">
 
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="🏃"
+                        <Label Text="&#xe566;"
                                FontSize="18"
-                               VerticalOptions="Center" />
+                               VerticalOptions="Center" FontFamily="MaterialSymbols" TextColor="{DynamicResource TextSecondary}" />
                         <Label Text="Szczegóły biegu"
                                FontSize="18"
                                FontAttributes="Bold"
-                               TextColor="#1E293B"
+                               TextColor="{DynamicResource TextPrimary}"
                                VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
@@ -68,20 +48,20 @@
                                              Spacing="6">
                             <Label Text="Dystans (km)"
                                    FontSize="12"
-                                   TextColor="#64748B"
+                                   TextColor="{DynamicResource TextMuted}"
                                    FontAttributes="Bold"
                                    TextTransform="Uppercase" />
 
                             <Border StrokeShape="RoundRectangle 12"
-                                    BackgroundColor="#F8FAFC"
-                                    Stroke="#E2E8F0"
+                                    BackgroundColor="{DynamicResource SurfaceMuted}"
+                                    Stroke="{DynamicResource Border}"
                                     StrokeThickness="1">
                                 <Grid Padding="12,0">
                                     <Entry Text="{Binding RunDistance}"
                                            Keyboard="Numeric"
                                            Placeholder="Np. 5"
-                                           PlaceholderColor="#94A3B8"
-                                           TextColor="#0F172A"
+                                           PlaceholderColor="{DynamicResource Placeholder}"
+                                           TextColor="{DynamicResource TextPrimary}"
                                            FontAttributes="Bold"
                                            HorizontalTextAlignment="Center"
                                            BackgroundColor="Transparent"
@@ -94,20 +74,20 @@
                                              Spacing="6">
                             <Label Text="Czas (min)"
                                    FontSize="12"
-                                   TextColor="#64748B"
+                                   TextColor="{DynamicResource TextMuted}"
                                    FontAttributes="Bold"
                                    TextTransform="Uppercase" />
 
                             <Border StrokeShape="RoundRectangle 12"
-                                    BackgroundColor="#F8FAFC"
-                                    Stroke="#E2E8F0"
+                                    BackgroundColor="{DynamicResource SurfaceMuted}"
+                                    Stroke="{DynamicResource Border}"
                                     StrokeThickness="1">
                                 <Grid Padding="12,0">
                                     <Entry Text="{Binding RunTime}"
                                            Keyboard="Numeric"
                                            Placeholder="Np. 26"
-                                           PlaceholderColor="#94A3B8"
-                                           TextColor="#0F172A"
+                                           PlaceholderColor="{DynamicResource Placeholder}"
+                                           TextColor="{DynamicResource TextPrimary}"
                                            FontAttributes="Bold"
                                            HorizontalTextAlignment="Center"
                                            BackgroundColor="Transparent"
@@ -122,10 +102,10 @@
 
             <!-- KARTA: MIĘDZYCZASY -->
             <Border StrokeShape="RoundRectangle 18"
-                    BackgroundColor="White"
+                    BackgroundColor="{DynamicResource Surface}"
                     StrokeThickness="0">
                 <Border.Shadow>
-                    <Shadow Brush="#334155"
+                    <Shadow Brush="{DynamicResource Shadow}"
                             Offset="0,4"
                             Radius="10"
                             Opacity="0.08" />
@@ -135,13 +115,13 @@
                                      Spacing="14">
 
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="⏱️"
+                        <Label Text="&#xe425;"
                                FontSize="18"
-                               VerticalOptions="Center" />
+                               VerticalOptions="Center" FontFamily="MaterialSymbols" TextColor="{DynamicResource TextSecondary}" />
                         <Label Text="Międzyczasy"
                                FontSize="18"
                                FontAttributes="Bold"
-                               TextColor="#1E293B"
+                               TextColor="{DynamicResource TextPrimary}"
                                VerticalOptions="Center" />
                     </HorizontalStackLayout>
 
@@ -152,14 +132,14 @@
                                Text="KM"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#64748B"
+                               TextColor="{DynamicResource TextMuted}"
                                HorizontalTextAlignment="Center" />
 
                         <Label Grid.Column="1"
                                Text="TEMPO"
                                FontSize="11"
                                FontAttributes="Bold"
-                               TextColor="#64748B"
+                               TextColor="{DynamicResource TextMuted}"
                                HorizontalTextAlignment="Center" />
                     </Grid>
 
@@ -168,8 +148,8 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Border StrokeShape="RoundRectangle 14"
-                                        BackgroundColor="#F8FAFC"
-                                        Stroke="#E2E8F0"
+                                        BackgroundColor="{DynamicResource SurfaceMuted}"
+                                        Stroke="{DynamicResource Border}"
                                         StrokeThickness="1"
                                         Padding="10">
 
@@ -178,7 +158,7 @@
 
                                         <Border Grid.Column="0"
                                                 StrokeShape="RoundRectangle 10"
-                                                BackgroundColor="#ECFDF5"
+                                                BackgroundColor="{DynamicResource GreenSoft}"
                                                 StrokeThickness="0"
                                                 HeightRequest="42"
                                                 WidthRequest="50"
@@ -187,21 +167,21 @@
                                             <Label Text="{Binding Kilometer}"
                                                    FontSize="14"
                                                    FontAttributes="Bold"
-                                                   TextColor="#047857"
+                                                   TextColor="{DynamicResource GreenText}"
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center" />
                                         </Border>
 
                                         <Border Grid.Column="1"
                                                 StrokeShape="RoundRectangle 10"
-                                                BackgroundColor="White"
-                                                Stroke="#CBD5E1"
+                                                BackgroundColor="{DynamicResource Surface}"
+                                                Stroke="{DynamicResource BorderStrong}"
                                                 StrokeThickness="1">
                                             <Grid Padding="12,0">
                                                 <Entry Text="{Binding Pace}"
                                                        Placeholder="Np. 4:45"
-                                                       PlaceholderColor="#94A3B8"
-                                                       TextColor="#0F172A"
+                                                       PlaceholderColor="{DynamicResource Placeholder}"
+                                                       TextColor="{DynamicResource TextPrimary}"
                                                        FontAttributes="Bold"
                                                        HorizontalTextAlignment="Center"
                                                        BackgroundColor="Transparent"
@@ -210,23 +190,23 @@
                                         </Border>
 
                                         <Border Grid.Column="2"
-                                                BackgroundColor="#FEF2F2"
-                                                Stroke="#FECACA"
+                                                BackgroundColor="{DynamicResource RedSoft}"
+                                                Stroke="{DynamicResource RedBorder}"
                                                 StrokeShape="RoundRectangle 10"
                                                 StrokeThickness="1"
                                                 HeightRequest="42"
                                                 WidthRequest="42"
                                                 HorizontalOptions="Center"
                                                 VerticalOptions="Center">
-                                            <Button Text="✕"
+                                            <Button Text="&#xe5cd;"
                                                     FontSize="18"
                                                     FontAttributes="Bold"
-                                                    TextColor="#DC2626"
+                                                    TextColor="{DynamicResource Red}"
                                                     BackgroundColor="Transparent"
                                                     Padding="0"
                                                     CornerRadius="10"
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveSplitCommand}"
-                                                    CommandParameter="{Binding .}" />
+                                                    CommandParameter="{Binding .}" FontFamily="MaterialSymbols" />
                                         </Border>
                                     </Grid>
                                 </Border>
@@ -236,8 +216,8 @@
 
                     <Button Text="+ Dodaj kilometr"
                             Command="{Binding AddSplitCommand}"
-                            BackgroundColor="#ECFDF5"
-                            TextColor="#059669"
+                            BackgroundColor="{DynamicResource GreenSoft}"
+                            TextColor="{DynamicResource Green}"
                             FontAttributes="Bold"
                             CornerRadius="12"
                             HeightRequest="46"
@@ -247,8 +227,8 @@
 
             <!-- PODSUMOWANIE -->
             <Border StrokeShape="RoundRectangle 18"
-                    BackgroundColor="White"
-                    Stroke="#E2E8F0"
+                    BackgroundColor="{DynamicResource Surface}"
+                    Stroke="{DynamicResource Border}"
                     StrokeThickness="1"
                     Padding="18">
                 <Grid ColumnDefinitions="*,*"
@@ -256,33 +236,33 @@
 
                     <Border Grid.Column="0"
                             StrokeShape="RoundRectangle 14"
-                            BackgroundColor="#F8FAFC"
+                            BackgroundColor="{DynamicResource SurfaceMuted}"
                             StrokeThickness="0"
                             Padding="14">
                         <VerticalStackLayout Spacing="4">
                             <Label Text="Liczba splitów"
                                    FontSize="12"
-                                   TextColor="#64748B" />
+                                   TextColor="{DynamicResource TextMuted}" />
                             <Label Text="{Binding Splits.Count}"
                                    FontSize="22"
                                    FontAttributes="Bold"
-                                   TextColor="#0F172A" />
+                                   TextColor="{DynamicResource TextPrimary}" />
                         </VerticalStackLayout>
                     </Border>
 
                     <Border Grid.Column="1"
                             StrokeShape="RoundRectangle 14"
-                            BackgroundColor="#F8FAFC"
+                            BackgroundColor="{DynamicResource SurfaceMuted}"
                             StrokeThickness="0"
                             Padding="14">
                         <VerticalStackLayout Spacing="4">
                             <Label Text="Status"
                                    FontSize="12"
-                                   TextColor="#64748B" />
+                                   TextColor="{DynamicResource TextMuted}" />
                             <Label Text="Gotowe do zapisu"
                                    FontSize="16"
                                    FontAttributes="Bold"
-                                   TextColor="#16A34A" />
+                                   TextColor="{DynamicResource Green}" />
                         </VerticalStackLayout>
                     </Border>
 
@@ -292,48 +272,48 @@
             <!-- TOOLKIT: WSKAZÓWKA -->
             <toolkit:Expander>
                 <toolkit:Expander.Header>
-                    <Border StrokeShape="RoundRectangle 16"
-                            BackgroundColor="#ECFDF5"
-                            Stroke="#A7F3D0"
+                    <Border StrokeShape="RoundRectangle 14"
+                            BackgroundColor="{DynamicResource GreenSoft}"
+                            Stroke="{DynamicResource GreenBorder}"
                             StrokeThickness="1"
                             Padding="16">
                         <HorizontalStackLayout Spacing="10">
-                            <Label Text="💡"
+                            <Label Text="&#xe0f0;"
                                    FontSize="18"
-                                   VerticalOptions="Center" />
+                                   VerticalOptions="Center" FontFamily="MaterialSymbols" TextColor="{DynamicResource TextSecondary}" />
                             <Label Text="Wskazówka biegowa"
                                    FontSize="16"
                                    FontAttributes="Bold"
-                                   TextColor="#065F46"
+                                   TextColor="{DynamicResource GreenText}"
                                    VerticalOptions="Center" />
                         </HorizontalStackLayout>
                     </Border>
                 </toolkit:Expander.Header>
 
-                <Border StrokeShape="RoundRectangle 16"
-                        BackgroundColor="White"
-                        Stroke="#A7F3D0"
+                <Border StrokeShape="RoundRectangle 14"
+                        BackgroundColor="{DynamicResource Surface}"
+                        Stroke="{DynamicResource GreenBorder}"
                         StrokeThickness="1"
                         Padding="16"
                         Margin="0,8,0,0">
                     <Label Text="Po zapisaniu możesz później edytować bieg w historii. Wpisuj tempo na kilometr w formacie np. 4:45, żeby było czytelnie przy analizie."
                            FontSize="14"
-                           TextColor="#065F46" />
+                           TextColor="{DynamicResource GreenText}" />
                 </Border>
             </toolkit:Expander>
 
             <!-- PRZYCISK ZAPISU -->
             <Button Text="Zapisz bieg"
                     Command="{Binding SaveWorkoutCommand}"
-                    BackgroundColor="#064E3B"
-                    TextColor="White"
-                    CornerRadius="14"
+                    BackgroundColor="{DynamicResource HeroRun}"
+                    TextColor="{DynamicResource OnHero}"
+                    CornerRadius="12"
                     HeightRequest="56"
                     FontAttributes="Bold"
                     FontSize="16"
                     Margin="0,4,0,20">
                 <Button.Shadow>
-                    <Shadow Brush="#064E3B"
+                    <Shadow Brush="{DynamicResource Shadow}"
                             Offset="0,4"
                             Radius="8"
                             Opacity="0.3" />

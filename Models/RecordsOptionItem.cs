@@ -8,7 +8,7 @@ public class RecordsOptionItem
     public string Title { get; set; } = string.Empty;
     public string Subtitle { get; set; } = string.Empty;
 
-    public Color BackgroundColor { get; set; } = Color.FromArgb("#FFFFFF");
-    public Color BorderColor { get; set; } = Color.FromArgb("#E2E8F0");
-    public Color TextColor { get; set; } = Color.FromArgb("#1E293B");
+    public Color BackgroundColor { get; set; } = FitnessTracker.Services.ThemeService.Get("Surface");
+    public Color BorderColor { get; set; } = FitnessTracker.Services.ThemeService.Get("Border");
+    public Color TextColor { get; set; } = FitnessTracker.Services.ThemeService.Get("TextPrimary");
 }

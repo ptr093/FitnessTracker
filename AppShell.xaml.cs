@@ -15,6 +15,8 @@ namespace FitnessTracker
             Routing.RegisterRoute("StatsPage", typeof(StatsPage));
             Routing.RegisterRoute("ManageExPage", typeof(ManageExercisesPage));
             Routing.RegisterRoute("WorkoutTemplatesPage", typeof(WorkoutTemplatesPage));
+            Routing.RegisterRoute(nameof(ProgressPage), typeof(ProgressPage));
+            Routing.RegisterRoute(nameof(DataSyncPage), typeof(DataSyncPage));
          
 
             Routing.RegisterRoute(

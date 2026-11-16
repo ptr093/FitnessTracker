@@ -91,12 +91,35 @@ namespace FitnessTracker.ViewModels
                 return;
             }
 
+            // Tempo "m:ss" zamieniamy na prędkość km/h – ten sam format czyta historia i edycja biegu
+            var speeds = new List<double>();
+            var invalid = new List<int>();
+            foreach (var split in Splits)
+            {
+                if (RunSplitsSerializer.TryPaceToSpeed(split.Pace, out var speed))
+                    speeds.Add(speed);
+                else if (!string.IsNullOrWhiteSpace(split.Pace))
+                    invalid.Add(split.Kilometer);
+            }
+
+            if (invalid.Count > 0)
+            {
+                if (App.Current.MainPage != null)
+                {
+                    await App.Current.MainPage.DisplayAlert(
+                        "Błąd",
+                        $"Niepoprawne tempo dla km: {string.Join(", ", invalid)}. Użyj formatu m:ss, np. 5:12.",
+                        "OK");
+                }
+                return;
+            }
+
             var workout = new Workout
             {
                 Type = "Bieganie",
                 Distance = RunDistance,
                 Duration = RunTime,
-                SplitsJson = JsonSerializer.Serialize(Splits),
+                SplitsJson = RunSplitsSerializer.Serialize(speeds),
                 Date = DateTime.Now
             };
 

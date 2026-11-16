@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Kafelek akcji na dashboardzie: kolorowa ikona + tytuł + opis. -->
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FitnessTracker.Controls.ActionTile">
+
+    <Border Style="{StaticResource Card}"
+            Padding="14"
+            MinimumHeightRequest="118">
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnTapped" />
+        </Border.GestureRecognizers>
+
+        <VerticalStackLayout Spacing="10">
+            <Border x:Name="IconBox"
+                    WidthRequest="42"
+                    HeightRequest="42"
+                    HorizontalOptions="Start"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 12">
+                <Label x:Name="IconLabel"
+                       FontFamily="MaterialSymbols"
+                       FontSize="24"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center" />
+            </Border>
+
+            <VerticalStackLayout Spacing="2">
+                <Label x:Name="TitleLabel"
+                       FontSize="15"
+                       FontAttributes="Bold"
+                       TextColor="{DynamicResource TextPrimary}"
+                       LineBreakMode="TailTruncation" />
+                <Label x:Name="SubtitleLabel"
+                       FontSize="12"
+                       TextColor="{DynamicResource TextMuted}"
+                       LineBreakMode="WordWrap"
+                       MaxLines="2" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </Border>
+</ContentView>
